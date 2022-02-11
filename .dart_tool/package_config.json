@@ -68,6 +68,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_bluetooth_serial",
+      "rootUri": "file:///Users/danielms/Desktop/Programming%202022-2023/Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bluetooth_serial-0.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///Users/danielms/Desktop/Programming%202022-2023/Flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4",
       "packageUri": "lib/",
@@ -212,7 +218,7 @@
       "languageVersion": "2.15"
     }
   ],
-  "generated": "2022-02-05T21:41:59.387997Z",
+  "generated": "2022-02-06T07:54:40.798496Z",
   "generator": "pub",
   "generatorVersion": "2.16.0"
 }

@@ -68,11 +68,11 @@
         "source": "/Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/res/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "/Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/build/app/intermediates/merged_res/debug/drawable-mdpi_splash.png.flat",
-        "source": "/Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/res/drawable-mdpi/splash.png"
-    },
-    {
         "merged": "/Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/build/app/intermediates/merged_res/debug/drawable-xxxhdpi_splash.png.flat",
         "source": "/Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/res/drawable-xxxhdpi/splash.png"
+    },
+    {
+        "merged": "/Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/build/app/intermediates/merged_res/debug/drawable-mdpi_splash.png.flat",
+        "source": "/Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/res/drawable-mdpi/splash.png"
     }
 ]
