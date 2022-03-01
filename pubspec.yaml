@@ -27,11 +27,16 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  toggle_switch: ^1.4.0
   flutter_native_splash: ^2.0.1+1
   material_design_icons_flutter: 5.0.6595
   flutter:
     sdk: flutter
   flutter_bluetooth_serial: ^0.4.0
+  flutter_localizations:
+    sdk: flutter 
+  intl: ^0.17.0
+  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -55,6 +60,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
 
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

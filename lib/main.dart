@@ -8,23 +8,59 @@ import 'package:passage_flutter/pages/manuals.dart';
 import 'package:passage_flutter/theme/app_theme.dart';
 import '/components/custom_app_bar.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+//Every time pub get is run, implicilty or explicitly, the IDE thinks this package doesn't exist. Very annoying.
+
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+
+  static _MyAppState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.=
+
+  Locale _locale = const Locale.fromSubtags(languageCode: 'en');
+
+  void setLocale(Locale value) {
+    setState(() {
+      _locale = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter Demo', initialRoute: '/', routes: {
-      '/': (context) => const MyHomePage(),
-      '/profile': (context) => const Profile(),
-      '/settings': (context) => const Settings(),
-      '/manualsHome': (context) => const ManualsHome(),
-      '/filtersHome': (context) => const FiltersHome(),
-    });
+    return MaterialApp(
+      title: 'Flutter Demo',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyHomePage(),
+        '/profile': (context) => const Profile(),
+        '/settings': (context) => const Settings(),
+        '/manualsHome': (context) => const ManualsHome(),
+        '/filtersHome': (context) => const FiltersHome(),
+      },
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''), // English, no country code
+        Locale('es', ''), // Spanish, no country code
+      ],
+      locale: _locale,
+    );
   }
 }
 
@@ -36,19 +72,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -72,9 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.pushNamed(context, '/filtersHome');
               },
-              child: const Text(
-                'Filter',
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                AppLocalizations.of(context)!.filter,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
             TextButton(
@@ -85,19 +108,14 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.pushNamed(context, '/manualsHome');
               },
-              child: const Text(
-                'Manual',
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                AppLocalizations.of(context)!.manual,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
