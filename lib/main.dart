@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:passage_flutter/filter_components/background_collected_page.dart';
+import 'package:passage_flutter/pages/lessons_page.dart';
 
 import 'package:passage_flutter/pages/profile.dart';
 import 'package:passage_flutter/pages/settings.dart';
 import 'package:passage_flutter/pages/filter.dart';
 import 'package:passage_flutter/pages/manuals.dart';
+import 'package:passage_flutter/pages/pdf_viewer_page.dart';
 
 import 'package:passage_flutter/theme/app_theme.dart';
 import '/components/custom_app_bar.dart';
@@ -11,6 +14,8 @@ import '/components/custom_app_bar.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //Every time pub get is run, implicilty or explicitly, the IDE thinks this package doesn't exist. Very annoying.
+
+import 'package:scoped_model/scoped_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,6 +53,8 @@ class _MyAppState extends State<MyApp> {
         '/settings': (context) => const Settings(),
         '/manualsHome': (context) => const ManualsHome(),
         '/filtersHome': (context) => const FiltersHome(),
+        '/lessonsPage': (context) => const LessonsPage(),
+        '/pdfViewer': (context) => const PDFViewerPage(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -111,6 +118,18 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(
                 AppLocalizations.of(context)!.manual,
                 style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.green),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/lessonsPage');
+              },
+              child: const Text(
+                'Lessons',
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],

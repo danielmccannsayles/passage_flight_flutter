@@ -1,7 +1,7 @@
 //material UI, components & custom theme - standard for every file
 import 'package:flutter/material.dart';
 import '../components/custom_app_bar.dart';
-import 'package:passage_flutter/theme/app_theme.dart';
+import '../filter_components/background_collecting_task.dart';
 
 //for bluetooth connection
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -11,6 +11,11 @@ import 'dart:developer';
 
 //for using platform exception
 import 'package:flutter/services.dart';
+
+import 'package:scoped_model/scoped_model.dart';
+import '../filter_components/background_collected_page.dart';
+
+import 'package:passage_flutter/theme/app_theme.dart';
 
 class FiltersHome extends StatefulWidget {
   const FiltersHome({Key? key}) : super(key: key);
@@ -22,16 +27,14 @@ class FiltersHome extends StatefulWidget {
 class _FiltersHomeState extends State<FiltersHome> {
 // Initializing the Bluetooth connection state to be unknown
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
-  // Initializing a global key, as it would help us in showing a SnackBar later
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   // Get the instance of the Bluetooth
   final FlutterBluetoothSerial _bluetooth = FlutterBluetoothSerial.instance;
   // Track the Bluetooth connection with the remote device
   BluetoothConnection? connection;
 
-  int? _deviceState;
-
   bool isDisconnecting = false;
+  bool _connecting = false;
 
   // To track whether the device is still connected to Bluetooth
   bool get isConnected => connection != null && connection!.isConnected;
@@ -41,6 +44,9 @@ class _FiltersHomeState extends State<FiltersHome> {
   BluetoothDevice? _device;
   bool _connected = false;
   bool _isButtonUnavailable = false;
+
+  //used for background data collection
+  BackgroundCollectingTask? _collectingTask;
 
   @override
   void initState() {
@@ -52,8 +58,6 @@ class _FiltersHomeState extends State<FiltersHome> {
         _bluetoothState = state;
       });
     });
-
-    _deviceState = 0; // neutral
 
     // If the bluetooth of the device is not enabled,
     // then request permission to turn on bluetooth
@@ -155,45 +159,19 @@ class _FiltersHomeState extends State<FiltersHome> {
     });
     if (_device == null) {
       log('No device selected');
-      setState(() => _isButtonUnavailable = false);
+      setState(() {
+        _isButtonUnavailable = false;
+      });
     } else {
-      try {
-        await BluetoothConnection.toAddress(_device?.address)
-            .then((_connection) {
-          log('Connected to the device');
-          connection = _connection;
-          setState(() {
-            _connected = true;
-          });
-
-          connection?.input?.listen(null).onDone(() {
-            if (isDisconnecting) {
-              log('Disconnecting locally!');
-            } else {
-              log('Disconnected remotely!');
-            }
-            if (mounted) {
-              setState(() {});
-            }
-          });
-        }).catchError((error) {
-          log('Cannot connect, exception occurred');
-          setState(() => _isButtonUnavailable = false);
-          log(error);
-        });
-        log('Device connected');
-
-        setState(() => _isButtonUnavailable = false);
-      } catch (exception) {
-        log(exception.toString());
-      }
+      //start background collecting task here - device can never be null
+      await _startBackgroundTask(context, _device!);
+      log('test filter filter');
     }
   }
 
   void _disconnect() async {
     setState(() {
       _isButtonUnavailable = true;
-      _deviceState = 0;
     });
 
     await connection?.close();
@@ -203,6 +181,56 @@ class _FiltersHomeState extends State<FiltersHome> {
         _connected = false;
         _isButtonUnavailable = false;
       });
+    }
+  }
+
+  //this is called automatically when the user connects to bluetooth
+  Future<void> _startBackgroundTask(
+    BuildContext context,
+    BluetoothDevice server,
+  ) async {
+    setState(() {
+      _connecting = true;
+    });
+    try {
+      _collectingTask = await BackgroundCollectingTask.connect(server);
+      await _collectingTask!.start();
+    } catch (ex) {
+      _collectingTask?.cancel();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error occured while connecting'),
+            content: const Text('Try turning on the filter'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      setState(() {
+        //no matter what, turn off connecting animation @ the end.
+        _connecting = false;
+      });
+
+      if (_collectingTask != null) {
+        setState(() {
+          _connected = true;
+        });
+      } else {
+        log('failed');
+        setState(() {
+          _isButtonUnavailable = false;
+          _connected = false;
+        });
+      }
     }
   }
 
@@ -284,6 +312,14 @@ class _FiltersHomeState extends State<FiltersHome> {
                                 : _connect,
                         child: Text(_connected ? 'Disconnect' : 'Connect'),
                       ),
+                      (_connecting
+                          ? FittedBox(
+                              child: Container(
+                                  margin: const EdgeInsets.all(16.0),
+                                  child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          AppTheme.colors.darkBlue))))
+                          : Container(/* Dummy */)),
                     ],
                   )
                 ]),
@@ -328,9 +364,26 @@ class _FiltersHomeState extends State<FiltersHome> {
                     'Send 0',
                     style: TextStyle(color: Colors.white),
                   ),
-                )
+                ),
+                ElevatedButton(
+                  onPressed: (_connected)
+                      ? () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ScopedModel<BackgroundCollectingTask>(
+                                  model: _collectingTask!,
+                                  child: const BackgroundCollectedPage(),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      : null,
+                  child: const Text('Go to Background Page'),
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),

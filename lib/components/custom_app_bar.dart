@@ -24,19 +24,30 @@ AppBar customAppBar(context, String title) {
             },
             tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
           ),
-          const SizedBox(
-            width: 39,
-          ),
-          ToggleSwitch(
-            initialLabelIndex: 0,
-            totalSwitches: 2,
-            labels: const ['English', 'Spanish'],
-            onToggle: (index) {
-              log('switched to: ' + index.toString());
-              MyApp.of(context)!.setLocale(
-                  Locale.fromSubtags(languageCode: index == 0 ? 'en' : 'es'));
-            },
-          ),
+          // const SizedBox(
+          //   width: 39,
+          // ),
+          // ToggleSwitch(
+          //     initialLabelIndex: 1,
+          //     totalSwitches: 2,
+          //     labels: const ['English', 'Spanish'],
+          //     onToggle: (index) {
+          //       log('switched to: ' + index.toString());
+          //       switch (index) {
+          //         case 0:
+          //           {
+          //             MyApp.of(context)!.setLocale(
+          //                 const Locale.fromSubtags(languageCode: 'en'));
+          //           }
+          //           break;
+          //         case 1:
+          //           {
+          //             MyApp.of(context)!.setLocale(
+          //                 const Locale.fromSubtags(languageCode: 'es'));
+          //           }
+          //           break;
+          //       }
+          //     }),
         ]);
       },
     ),
