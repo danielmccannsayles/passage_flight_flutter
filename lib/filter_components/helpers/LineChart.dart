@@ -9,6 +9,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import './PaintStyle.dart';
+import 'dart:developer';
 
 class LabelEntry {
   final double value;
@@ -236,7 +237,9 @@ class _LineChartPainter extends CustomPainter {
   double maxValue = -double.maxFinite;
 
   /// Minimal value of all data series values
-  double minValue = double.maxFinite;
+  // Set to 0.0 for my purposes. When it was set to maxFinite it got very weird
+  //and kept crashing
+  double minValue = 0.0;
 
   double _minimalHorizontalRatio = 0;
   double _minimalVerticalRatio = 0;
@@ -579,6 +582,7 @@ class _LineChartPainter extends CustomPainter {
       // @TODO ! not working at all for lower :C
       int zeros = 0;
       while (interval < 0) {
+        log('help me');
         interval = interval * 10;
         zeros += 1;
       }

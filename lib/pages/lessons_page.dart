@@ -68,14 +68,18 @@ class LessonsPageState extends State<LessonsPage> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return Scaffold(
-                              appBar: pdfBar(
-                                context,
-                                _lessonsList[index].title,
-                              ),
-                              body: PdfView(
-                                  controller: PdfController(
-                                      document: _lessonsList[index].document)));
+                          //TODO(Daniel):willpopscope is used cause popping this page crashes the app - something to fix
+                          return WillPopScope(
+                              onWillPop: () async => false,
+                              child: Scaffold(
+                                  appBar: pdfBar(
+                                    context,
+                                    _lessonsList[index].title,
+                                  ),
+                                  body: PdfView(
+                                      controller: PdfController(
+                                          document:
+                                              _lessonsList[index].document))));
                         }));
                       },
                       title: Text(

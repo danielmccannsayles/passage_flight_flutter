@@ -174,14 +174,13 @@ class _FiltersHomeState extends State<FiltersHome> {
       _isButtonUnavailable = true;
     });
 
-    await connection?.close();
+    await _collectingTask!.cancel();
     log('Device disconnected');
-    if (!connection!.isConnected) {
-      setState(() {
-        _connected = false;
-        _isButtonUnavailable = false;
-      });
-    }
+
+    setState(() {
+      _connected = false;
+      _isButtonUnavailable = false;
+    });
   }
 
   //this is called automatically when the user connects to bluetooth
@@ -197,27 +196,13 @@ class _FiltersHomeState extends State<FiltersHome> {
       await _collectingTask!.start();
     } catch (ex) {
       _collectingTask?.cancel();
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error occured while connecting'),
-            content: const Text('Try turning on the filter'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text("Close"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      log('task failed to start');
     } finally {
       setState(() {
         //no matter what, turn off connecting animation @ the end.
+        //also make button available
         _connecting = false;
+        _isButtonUnavailable = false;
       });
 
       if (_collectingTask != null) {
@@ -227,7 +212,6 @@ class _FiltersHomeState extends State<FiltersHome> {
       } else {
         log('failed');
         setState(() {
-          _isButtonUnavailable = false;
           _connected = false;
         });
       }

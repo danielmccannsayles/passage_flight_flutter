@@ -36,7 +36,7 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
 
     // Step for argument labels
     const Duration argumentsStep =
-        Duration(minutes: 10); // @TODO . step duration should be configurable
+        Duration(minutes: 5); // @TODO . step duration should be configurable
 
     // Find first timestamp floored to step before
     final DateTime beginningArguments = lastSamples.first.timestamp;
