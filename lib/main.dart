@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passage_flutter/pages/guided_lesson_pages/guided_lessons/science_lesson.dart';
 import 'package:passage_flutter/pages/lessons_page.dart';
 
 import 'package:passage_flutter/pages/profile.dart';
@@ -58,6 +59,7 @@ class _MyAppState extends State<MyApp> {
               create: (context) => ProgressStore(),
               child: const GuidedLessons(),
             ),
+        '/scienceLessonOne': (context) => const ScienceLesson(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,

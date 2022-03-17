@@ -20,6 +20,12 @@ class GuidedLessons extends StatelessWidget {
             },
             child: const Text('Go home!'),
           ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed('/scienceLessonOne');
+            },
+            child: const Text('Open Science Lesson One'),
+          ),
           Consumer<ProgressStore>(builder: (context, progress, child) {
             return Column(children: [
               // Text('math progress: ${progress.getProgress('mathOneProgress')}'),
