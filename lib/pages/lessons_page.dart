@@ -55,44 +55,45 @@ class LessonsPageState extends State<LessonsPage> {
           ],
         ),
         Center(
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: _lessonsList.length,
-                // The list items
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    color: Colors.amberAccent,
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          //TODO(Daniel):willpopscope is used cause popping this page crashes the app - something to fix
-                          return WillPopScope(
-                              onWillPop: () async => false,
-                              child: Scaffold(
-                                  appBar: pdfBar(
-                                    context,
-                                    _lessonsList[index].title,
-                                  ),
-                                  body: PdfView(
-                                      controller: PdfController(
-                                          document:
-                                              _lessonsList[index].document))));
-                        }));
-                      },
-                      title: Text(
-                        _lessonsList[index].title,
-                        style: const TextStyle(fontSize: 24),
-                      ),
-                      trailing: Text(
-                        _lessonsList[index].blurb,
-                        style: const TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  );
-                }))
+            child: Padding(
+                padding: const EdgeInsets.all(50),
+                child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: _lessonsList.length,
+                    // The list items
+                    itemBuilder: (context, index) {
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        color: AppTheme.colors.orange,
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              //willpopscope is used cause popping this page crashes the app - something to fix
+                              return WillPopScope(
+                                  onWillPop: () async => false,
+                                  child: Scaffold(
+                                      appBar: pdfBar(
+                                        context,
+                                        _lessonsList[index].title,
+                                      ),
+                                      body: PdfView(
+                                          controller: PdfController(
+                                              document: _lessonsList[index]
+                                                  .document))));
+                            }));
+                          },
+                          title: Text(
+                            _lessonsList[index].title,
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                          subtitle: Text(
+                            _lessonsList[index].blurb,
+                          ),
+                        ),
+                      );
+                    })))
       ]),
     );
   }

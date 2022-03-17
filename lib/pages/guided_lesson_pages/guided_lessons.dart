@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passage_flutter/pages/guided_lesson_pages/easy_data.dart';
 import '../../components/custom_app_bar.dart';
 
 import './progress_model.dart';
@@ -29,19 +30,39 @@ class GuidedLessons extends StatelessWidget {
               //       progress.changeProgress('mathOneProgress', 2);
               //     },
               //     child: const Text('Press me to change progress'))
-              Text('test data: ${progress.getTestData()}'),
+              Text('Math One: ${progress.getTestData()!.mathOne}'),
+
               TextButton(
                 onPressed: () {
-                  progress.changeTest(2);
+                  progress.changeTest('mathOne', 2);
                 },
-                child: const Text('Press me to change test to two'),
+                child: const Text('Change counter to 2'),
               ),
               TextButton(
                 onPressed: () {
-                  progress.changeTest(1);
+                  progress.changeTest('mathOne', 1);
                 },
-                child: const Text('Press me to change test to 1'),
-              )
+                child: const Text('Change counter to 1'),
+              ),
+              Slider(
+                value: progress.getTestData()!.scienceOne.toDouble(),
+                max: 10,
+                divisions: 10,
+                label: progress.getTestData()!.scienceOne.toDouble().toString(),
+                onChanged: (double value) {
+                  progress.changeTest('scienceOne', value.toInt());
+                },
+              ),
+              const Text('The Top One Controls this one:'),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(40),
+                child: LinearProgressIndicator(
+                  value: progress.getTestData()!.scienceOne.toDouble() / 10,
+                ),
+              ),
             ]);
           })
         ]),

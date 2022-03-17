@@ -245,7 +245,7 @@ class _FiltersHomeState extends State<FiltersHome> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/manualsHome');
+                          FlutterBluetoothSerial.instance.openSettings();
                         },
                         child: const Text('Bluetooth settings'),
                       ),
@@ -335,20 +335,6 @@ class _FiltersHomeState extends State<FiltersHome> {
             ),
             Row(
               children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Send 1',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Send 0',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
                 ElevatedButton(
                   onPressed: (_connected)
                       ? () {
