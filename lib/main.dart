@@ -59,7 +59,10 @@ class _MyAppState extends State<MyApp> {
               create: (context) => ProgressStore(),
               child: const GuidedLessons(),
             ),
-        '/scienceLessonOne': (context) => const ScienceLesson(),
+        '/scienceLessonOne': (context) => ChangeNotifierProvider(
+              create: (context) => ProgressStore(),
+              child: const ScienceLesson(),
+            ),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,
