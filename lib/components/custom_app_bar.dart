@@ -1,13 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:passage_flutter/theme/app_theme.dart';
-
-import 'package:toggle_switch/toggle_switch.dart';
-
-import 'package:passage_flutter/main.dart';
 
 AppBar customAppBar(context, String title) {
   return AppBar(

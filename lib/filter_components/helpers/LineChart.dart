@@ -1,3 +1,9 @@
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: prefer_const_constructors
+// ignore_for_file: unnecessary_this
+// ignore_for_file: file_names
+// ignore_for_file: use_key_in_widget_constructors
+
 /// @name LineChart
 /// @version 0.0.5
 /// @description Simple line chart widget

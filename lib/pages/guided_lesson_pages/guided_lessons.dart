@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:passage_flutter/pages/guided_lesson_pages/easy_data.dart';
 import '../../components/custom_app_bar.dart';
 
 import './progress_model.dart';

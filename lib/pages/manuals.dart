@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:passage_flutter/theme/app_theme.dart';
 import '../components/custom_app_bar.dart';
-
-import 'dart:developer';
 
 class ManualsHome extends StatefulWidget {
   const ManualsHome({Key? key}) : super(key: key);

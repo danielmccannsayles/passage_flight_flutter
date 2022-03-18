@@ -1,3 +1,10 @@
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: prefer_const_constructors
+// ignore_for_file: unnecessary_this
+// ignore_for_file: file_names
+// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:ui';
 
 /// A description of the style to use when drawing on a [Canvas].
