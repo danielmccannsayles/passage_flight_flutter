@@ -35,27 +35,27 @@ class GuidedLessons extends StatelessWidget {
               //       progress.changeProgress('mathOneProgress', 2);
               //     },
               //     child: const Text('Press me to change progress'))
-              Text('Math One: ${progress.getTestData()!.mathOne}'),
+              Text('Math One: ${progress.getTestData().mathOne}'),
 
               TextButton(
                 onPressed: () {
-                  progress.changeTest('mathOne', 2);
+                  progress.changeProgress('mathOne', 2);
                 },
                 child: const Text('Change counter to 2'),
               ),
               TextButton(
                 onPressed: () {
-                  progress.changeTest('mathOne', 1);
+                  progress.changeProgress('mathOne', 1);
                 },
                 child: const Text('Change counter to 1'),
               ),
               Slider(
-                value: progress.getTestData()!.scienceOne.toDouble(),
+                value: progress.getTestData().mathOne.toDouble(),
                 max: 10,
                 divisions: 10,
-                label: progress.getTestData()!.scienceOne.toDouble().toString(),
+                label: progress.getTestData().mathOne.toDouble().toString(),
                 onChanged: (double value) {
-                  progress.changeTest('scienceOne', value.toInt());
+                  progress.changeProgress('scienceOne', value.toInt());
                 },
               ),
               const Text('The Top One Controls this one:'),
@@ -65,7 +65,7 @@ class GuidedLessons extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(40),
                 child: LinearProgressIndicator(
-                  value: progress.getTestData()!.scienceOne.toDouble() / 10,
+                  value: progress.getTestData().mathOne.toDouble() / 10,
                 ),
               ),
             ]);

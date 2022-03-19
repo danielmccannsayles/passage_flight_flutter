@@ -6,10 +6,10 @@ part 'easy_data.g.dart';
 
 @JsonSerializable()
 class EasyData {
-  int mathOne = 0;
-  int scienceOne = 0;
+  int mathOne;
+  List<int> scienceOne;
 
-  EasyData(this.mathOne, this.scienceOne);
+  EasyData({required this.mathOne, required this.scienceOne});
 
   //low budget version of what the fromjson and tojson do. Easier to understand,
   //and less annoying to deal w/ recompiling L O L.
@@ -18,6 +18,15 @@ class EasyData {
       'mathOne': mathOne,
       'scienceOne': scienceOne,
     };
+  }
+
+  //use this instead of map when getting just one property
+  dynamic get(String propertyName) {
+    var _mapRep = toMap();
+    if (_mapRep.containsKey(propertyName)) {
+      return _mapRep[propertyName];
+    }
+    throw ArgumentError('propery not found');
   }
 
   // run the following command to generate json:

@@ -37,7 +37,9 @@ class ProgressStorage {
       log(e.toString());
       // Most likely error is that this is being run for the first time.
       //return the default value in this case
-      return EasyData(0, 0);
+
+      //hardcoded data here - ideally should be dynamic but too much work
+      return EasyData(mathOne: 0, scienceOne: [0, 0]);
     }
   }
 

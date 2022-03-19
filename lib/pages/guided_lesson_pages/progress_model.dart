@@ -5,18 +5,14 @@ import 'progress_storage.dart';
 import 'dart:developer';
 
 class ProgressStore extends ChangeNotifier {
-  final _progress = {'mathOneProgress': 0, 'scienceOneProgress': 2};
-  //eventually this will be dynamically populated from the file which it's stored in.
+  //possibly change this to be late - it gets defined in the constructor anyways
+  EasyData _testData = EasyData(mathOne: 0, scienceOne: [0, 0]);
 
-  EasyData _testData = EasyData(0, 0);
-
-  EasyData? getTestData() => _testData;
-
-  int? getProgress(String name) => _progress[name];
+  EasyData getTestData() => _testData;
 
   final ProgressStorage progressStorage = ProgressStorage();
 
-  void changeTest(name, value) {
+  void changeProgress(name, value) {
     Map temp = _testData.toMap();
     temp[name] = value;
 
@@ -25,8 +21,9 @@ class ProgressStore extends ChangeNotifier {
 
     //dynamically map the Map named temp onto the testData object because objects
     //in Flutter suck and aren't powerful unlike in JavaScript the true king.
-    _testData =
-        EasyData(temp[keysList.elementAt(0)], temp[keysList.elementAt(1)]);
+    _testData = EasyData(
+        mathOne: temp[keysList.elementAt(0)],
+        scienceOne: temp[keysList.elementAt(1)]);
 
     //store it in file
     progressStorage.writeProgress(_testData);

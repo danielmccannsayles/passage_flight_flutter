@@ -49,12 +49,14 @@ class ScienceLessonState extends State<ScienceLesson> {
   //defined in WidgetsBinding so as not to query scrollController before it attaches
   double _scrollHeight = 0;
 
+  int numQuizzes = 2;
+
   void clearProgress() {
     setState(() {
       _currentProgress = 0;
       _progressVisual = 0;
       Provider.of<ProgressStore>(context, listen: false)
-          .changeTest('mathOne', 0);
+          .changeProgress('scienceOne', List.filled(numQuizzes, 0));
     });
   }
 
@@ -111,9 +113,19 @@ class ScienceLessonState extends State<ScienceLesson> {
           questions: quizOneJson.questions,
           allAnswers: quizOneJson.allAnswers,
           correctAnswers: quizOneJson.correctAnswers,
-          numQuizzes: 1,
+          numQuizzes: numQuizzes,
+          index: 0,
+          numQuestions: 2,
+          lessonName: 'scienceOne',
+        ),
+        QuizComponent(
+          questions: quizOneJson.questions,
+          allAnswers: quizOneJson.allAnswers,
+          correctAnswers: quizOneJson.correctAnswers,
+          numQuizzes: numQuizzes,
           index: 1,
           numQuestions: 2,
+          lessonName: 'scienceOne',
         ),
         const SizedBox(
           height: 500,

@@ -9,6 +9,7 @@ class QuizComponent extends StatefulWidget {
   final int numQuizzes;
   final int index;
   final int numQuestions;
+  final String lessonName;
 
   const QuizComponent(
       {Key? key,
@@ -17,7 +18,8 @@ class QuizComponent extends StatefulWidget {
       required this.correctAnswers,
       required this.numQuizzes,
       required this.index,
-      required this.numQuestions})
+      required this.numQuestions,
+      required this.lessonName})
       : super(key: key);
 
   @override
@@ -40,7 +42,7 @@ class _QuizComponentState extends State<QuizComponent> {
         return;
       }
     }
-    // Provider.of<ProgressStore>(context, listen: false).changeTest('mathOne', 1);
+    //TODO: Provider.of<ProgressStore>(context, listen: false).changeTest('mathOne', 1);
   }
 
   //called when an answer is chosen
@@ -53,7 +55,8 @@ class _QuizComponentState extends State<QuizComponent> {
   List<Widget> _createQuestions() {
     List<Widget> questions = [];
     for (int i = 0; i < widget.numQuestions; i++) {
-      questions.add(Text(widget.allAnswers[i]));
+      questions.add(Text(widget.questions[i]));
+      //TODO: create custom widget w/ answers displayed.
     }
     return questions;
   }
@@ -71,8 +74,9 @@ class _QuizComponentState extends State<QuizComponent> {
     final _storage = Provider.of<ProgressStore>(context);
 
     setState(() {
-      //TODO:quizData = storage.getQuizArray
-      _quizData[1] = _storage.getTestData()!.mathOne;
+      //has to be mapped so we can pass a dynamic parameter and get back a value.
+      //VERY ANNOYING YOU suck fluTTer
+      _quizData = _storage.getTestData().get(widget.lessonName);
     });
   }
 
@@ -88,26 +92,28 @@ class _QuizComponentState extends State<QuizComponent> {
           children: [
             const Text('hey'),
             const Text('Quiz:'),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(20.0),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
                 children:
                     _createQuestions(), // <<<<< Note this change for the return type
               ),
             ),
-            Text('${_quizData[1]}'),
+            Text('${_quizData[widget.index]}'),
             TextButton(
                 onPressed: () {
+                  _quizData[widget.index] = 1;
                   Provider.of<ProgressStore>(context, listen: false)
-                      .changeTest('mathOne', 1);
+                      .changeProgress(widget.lessonName, _quizData);
                 },
-                child: const Text('change to 1')),
+                child: const Text('Correct (1)')),
             TextButton(
                 onPressed: () {
+                  _quizData[widget.index] = 0;
                   Provider.of<ProgressStore>(context, listen: false)
-                      .changeTest('mathOne', 2);
+                      .changeProgress(widget.lessonName, _quizData);
                 },
-                child: const Text('change to 2')),
+                child: const Text('False (0)')),
           ],
         ));
   }
