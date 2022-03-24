@@ -25,6 +25,8 @@ class ProgressStorage {
   }
 
   Future<EasyData> readProgress() async {
+    //TODO: If getting an error after adding 0's to the list then comment out
+    //some of this - it's probably looking at old data that was saved.
     try {
       final file = await _localFile;
 
@@ -39,7 +41,8 @@ class ProgressStorage {
       //return the default value in this case
 
       //hardcoded data here - ideally should be dynamic but too much work
-      return EasyData(mathOne: 0, scienceOne: [0, 0]);
+      //TODO: make this dynamic somehow
+      return EasyData(mathOne: [0, 0, 0], scienceOne: [0, 0, 0]);
     }
   }
 
@@ -47,7 +50,7 @@ class ProgressStorage {
     final file = await _localFile;
 
     // Write the file
-    log('test Data saved: $testData');
+    log('Progress saved (Science One): ${testData.scienceOne}');
     return file.writeAsString(jsonEncode(testData.toJson()));
   }
 }

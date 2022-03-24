@@ -6,7 +6,7 @@ part 'easy_data.g.dart';
 
 @JsonSerializable()
 class EasyData {
-  int mathOne;
+  List<int> mathOne;
   List<int> scienceOne;
 
   EasyData({required this.mathOne, required this.scienceOne});

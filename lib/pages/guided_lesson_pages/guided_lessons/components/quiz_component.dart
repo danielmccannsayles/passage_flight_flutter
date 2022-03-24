@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../progress_model.dart';
+import 'dart:developer';
 
 class QuizComponent extends StatefulWidget {
   final List questions;
   final List allAnswers;
   final List correctAnswers;
   final int numQuizzes;
+
+  //index starts at 1 - 0 should never be passed in.
   final int index;
   final int numQuestions;
   final String lessonName;
@@ -28,7 +31,7 @@ class QuizComponent extends StatefulWidget {
 
 class _QuizComponentState extends State<QuizComponent> {
   //internal state - initialized as a list of 'numQuizzes'  entries.
-  late List<int> _quizData;
+  List<int> _progressData = [0, 0, 0];
 
   //Add the answer they choose to this
   late List<String> _answeredQuestions;
@@ -64,7 +67,9 @@ class _QuizComponentState extends State<QuizComponent> {
   @override
   void initState() {
     super.initState();
-    _quizData = List.filled(widget.numQuizzes, 0);
+    //numQuizzes+1 because index 0 is reserved for progress
+    _progressData = List.filled(widget.numQuizzes + 1, 0);
+    log('_progressData: $_progressData');
     _answeredQuestions = List.filled(widget.numQuestions, '');
   }
 
@@ -76,7 +81,8 @@ class _QuizComponentState extends State<QuizComponent> {
     setState(() {
       //has to be mapped so we can pass a dynamic parameter and get back a value.
       //VERY ANNOYING YOU suck fluTTer
-      _quizData = _storage.getTestData().get(widget.lessonName);
+      _progressData = _storage.getProgressData().get(widget.lessonName);
+      log('_progressData changed to: $_progressData');
     });
   }
 
@@ -99,19 +105,17 @@ class _QuizComponentState extends State<QuizComponent> {
                     _createQuestions(), // <<<<< Note this change for the return type
               ),
             ),
-            Text('${_quizData[widget.index]}'),
+            Text('${_progressData[widget.index]}'),
             TextButton(
                 onPressed: () {
-                  _quizData[widget.index] = 1;
                   Provider.of<ProgressStore>(context, listen: false)
-                      .changeProgress(widget.lessonName, _quizData);
+                      .changeProgress(widget.lessonName, widget.index, 1);
                 },
                 child: const Text('Correct (1)')),
             TextButton(
                 onPressed: () {
-                  _quizData[widget.index] = 0;
                   Provider.of<ProgressStore>(context, listen: false)
-                      .changeProgress(widget.lessonName, _quizData);
+                      .changeProgress(widget.lessonName, widget.index, 0);
                 },
                 child: const Text('False (0)')),
           ],

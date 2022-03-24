@@ -7,7 +7,7 @@ part of 'easy_data.dart';
 // **************************************************************************
 
 EasyData _$EasyDataFromJson(Map<String, dynamic> json) => EasyData(
-      mathOne: json['mathOne'] as int,
+      mathOne: (json['mathOne'] as List<dynamic>).map((e) => e as int).toList(),
       scienceOne:
           (json['scienceOne'] as List<dynamic>).map((e) => e as int).toList(),
     );

@@ -5,39 +5,70 @@ import 'progress_storage.dart';
 import 'dart:developer';
 
 class ProgressStore extends ChangeNotifier {
-  //possibly change this to be late - it gets defined in the constructor anyways
-  EasyData _testData = EasyData(mathOne: 0, scienceOne: [0, 0]);
+  //The Data Structure:
+  //      scienceOne:  [0, 0, 0]
+  // -> the first int is scroll progress, from 0 to 100 %
+  // -> the next integers are quiz values - 0 for not complete, 1 for complete
+  // The array should be number of quizzes + 1 in length
 
-  EasyData getTestData() => _testData;
+  //TODO: change this to be dynamic somehow
+  EasyData _progressData = EasyData(mathOne: [0, 0, 0], scienceOne: [0, 0, 0]);
+
+  EasyData getProgressData() => _progressData;
 
   final ProgressStorage progressStorage = ProgressStorage();
 
-  void changeProgress(name, value) {
-    Map temp = _testData.toMap();
-    temp[name] = value;
+  void clearProgress(String name) {
+    //create a map & and iterable list of keys
+    Map temp = _progressData.toMap();
+    Iterable keysList = temp.keys;
+
+    //find length, then create a List of 0's
+    int length = temp[name].length;
+    temp[name] = List.filled(length, 0);
+
+    _progressData = EasyData(
+        mathOne: temp[keysList.elementAt(0)],
+        scienceOne: temp[keysList.elementAt(1)]);
+
+    progressStorage.writeProgress(_progressData);
+    notifyListeners();
+  }
+
+  void changeProgress(String name, int index, int value) {
+    Map temp = _progressData.toMap();
+    temp[name][index] = value;
 
     //create list of keys so that mapping can be done dynamically
     Iterable keysList = temp.keys;
 
-    //dynamically map the Map named temp onto the testData object because objects
+    //dynamically map the Map named temp onto the progressData object because objects
     //in Flutter suck and aren't powerful unlike in JavaScript the true king.
-    _testData = EasyData(
+    _progressData = EasyData(
         mathOne: temp[keysList.elementAt(0)],
         scienceOne: temp[keysList.elementAt(1)]);
 
     //store it in file
-    progressStorage.writeProgress(_testData);
-    log(_testData.mathOne.toString());
+    progressStorage.writeProgress(_progressData);
+    log(_progressData.mathOne.toString());
     notifyListeners();
   }
 
   ProgressStore() {
-    progressStorage.readProgress().then((EasyData value) => {
-          _testData = value,
-          log('created with value: $_testData'),
-          //notify listeners is needed here because this is a future so it takes a second to return
-          //without it testData is always going to start @ 0.
-          notifyListeners()
-        });
+    progressStorage.readProgress().then((EasyData value) {
+      Map temp = value.toMap();
+      Iterable keysList = temp.keys;
+      //TODO: finish this - should check if the data that is saved is the right length.
+      //TODO: If not it should add as many 0's as necessary, or subtract as many digits from the back.
+
+      // for (var key in keysList){
+      //   if (temp[key])
+      // }
+      _progressData = value;
+      log('created with value: $_progressData');
+      //notify listeners is needed here because this is a future so it takes a second to return
+      //without it progressData is always going to start @ 0.
+      notifyListeners();
+    });
   }
 }

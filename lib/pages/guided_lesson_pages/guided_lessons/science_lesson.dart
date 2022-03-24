@@ -31,7 +31,6 @@ class ScienceLesson extends StatefulWidget {
 }
 
 class ScienceLessonState extends State<ScienceLesson> {
-  //TODO: set Scroll Controller to initial progress on load.
   final ScrollController _scrollController = ScrollController();
 
   final throttle =
@@ -56,37 +55,57 @@ class ScienceLessonState extends State<ScienceLesson> {
       _currentProgress = 0;
       _progressVisual = 0;
       Provider.of<ProgressStore>(context, listen: false)
-          .changeProgress('scienceOne', List.filled(numQuizzes, 0));
+          .clearProgress('scienceOne');
     });
+  }
+
+  VoidCallback? updateScroll(double value) {
+    setState(() {
+      _scrollPosition = value;
+      if (_scrollPosition > _currentProgress) {
+        _currentProgress = _scrollPosition;
+        //This is effective integer division - turns it from double to int while dividing
+        _progressVisual = _currentProgress * 100 ~/ _scrollHeight;
+        log('new progress reached: $_currentProgress');
+
+        Provider.of<ProgressStore>(context, listen: false)
+            .changeProgress('scienceOne', 0, _progressVisual);
+      }
+    });
+    return null;
+  }
+
+  //In didChange Dependencies context is bound so we can use Provider.of(context)
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _progressVisual =
+        Provider.of<ProgressStore>(context).getProgressData().scienceOne[0];
+
+    _currentProgress = _progressVisual / 100 * _scrollHeight;
+
+    log('_progressvisual changed to: $_progressVisual');
   }
 
   @override
   initState() {
     super.initState();
-
-    VoidCallback? updateScroll(double value) {
-      setState(() {
-        _scrollPosition = value;
-        if (_scrollPosition > _currentProgress) {
-          _currentProgress = _scrollPosition;
-          //This is effective integer division - turns it from double to int while dividing
-          _progressVisual = _currentProgress * 100 ~/ _scrollHeight;
-          log('new progress reached: $_currentProgress');
-        }
-      });
-      return null;
-    }
+    //Define normal progress here real quick by inverting the other formula
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      _currentProgress = _progressVisual / 100 * _scrollHeight;
+
       if (_scrollController.hasClients) {
+        //set scroll to current position
+        _scrollController.jumpTo(_currentProgress);
+        log('test scorll contt');
+
+        //add listener
         _scrollController.addListener(
             () => throttle.setValue(_scrollController.position.pixels));
 
-        //set scroll height to be used in calculations
-        //isn't exactly perfect - ends up at 96% of the scroll. This is fine
-        //since the final 4% will be from a quiz or something
-
-        //SCROLL Height is equal to viewport PLUS THE HEIGHT OF ALL QUIZZES
+        //TODO: SCROLL Height is equal to viewport PLUS THE HEIGHT OF ALL QUIZZES
         _scrollHeight = _scrollController.position.viewportDimension;
 
         throttle.values.listen((value) => updateScroll(value));
@@ -114,7 +133,7 @@ class ScienceLessonState extends State<ScienceLesson> {
           allAnswers: quizOneJson.allAnswers,
           correctAnswers: quizOneJson.correctAnswers,
           numQuizzes: numQuizzes,
-          index: 0,
+          index: 1,
           numQuestions: 2,
           lessonName: 'scienceOne',
         ),
@@ -123,7 +142,7 @@ class ScienceLessonState extends State<ScienceLesson> {
           allAnswers: quizOneJson.allAnswers,
           correctAnswers: quizOneJson.correctAnswers,
           numQuizzes: numQuizzes,
-          index: 1,
+          index: 2,
           numQuestions: 2,
           lessonName: 'scienceOne',
         ),
