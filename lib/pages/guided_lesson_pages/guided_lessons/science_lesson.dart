@@ -22,6 +22,8 @@ final quizOneJson = QuizJson([
   "6"
 ]);
 
+final heightsList = <double>[300, 300];
+
 //Begin science lesson widget
 class ScienceLesson extends StatefulWidget {
   const ScienceLesson({Key? key}) : super(key: key);
@@ -105,8 +107,8 @@ class ScienceLessonState extends State<ScienceLesson> {
         _scrollController.addListener(
             () => throttle.setValue(_scrollController.position.pixels));
 
-        //TODO: SCROLL Height is equal to viewport PLUS THE HEIGHT OF ALL QUIZZES
-        _scrollHeight = _scrollController.position.viewportDimension;
+        _scrollHeight = _scrollController.position.viewportDimension +
+            heightsList.fold(0, (t, c) => t + c);
 
         throttle.values.listen((value) => updateScroll(value));
       }
@@ -134,7 +136,7 @@ class ScienceLessonState extends State<ScienceLesson> {
           correctAnswers: quizOneJson.correctAnswers,
           numQuizzes: numQuizzes,
           index: 1,
-          numQuestions: 2,
+          height: heightsList[0],
           lessonName: 'scienceOne',
         ),
         QuizComponent(
@@ -143,7 +145,7 @@ class ScienceLessonState extends State<ScienceLesson> {
           correctAnswers: quizOneJson.correctAnswers,
           numQuizzes: numQuizzes,
           index: 2,
-          numQuestions: 2,
+          height: heightsList[1],
           lessonName: 'scienceOne',
         ),
         const SizedBox(

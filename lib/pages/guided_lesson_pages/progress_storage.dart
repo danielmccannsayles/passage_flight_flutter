@@ -42,6 +42,9 @@ class ProgressStorage {
 
       //hardcoded data here - ideally should be dynamic but too much work
       //TODO: make this dynamic somehow
+      //TODO: Possibly create another permanent data storage that stores global variables such as
+      //TODO: Amount of quizzes - or just make a new file that defines it and import
+      //that file lol
       return EasyData(mathOne: [0, 0, 0], scienceOne: [0, 0, 0]);
     }
   }
