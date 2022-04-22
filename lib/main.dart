@@ -19,8 +19,20 @@ import 'package:provider/provider.dart';
 import 'pages/guided_lesson_pages/progress_model.dart';
 import 'pages/guided_lesson_pages/guided_lessons.dart';
 
+import 'package:flutter/services.dart';
+import './components/tita_text_bar.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+
+import 'dart:developer';
+
 void main() {
-  runApp(const MyApp());
+  // Call this manually before setpreferred orientation
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //set preferred orientation then run app
+  //Documentation: https://greymag.medium.com/flutter-orientation-lock-portrait-only-c98910ebd769
+  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft])
+      .then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -45,10 +57,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'LIFE APP',
       initialRoute: '/',
       routes: {
-        '/': (context) => const MyHomePage(),
+        '/': (context) => ChangeNotifierProvider(
+              create: (context) => ProgressStore(),
+              child: const MyHomePage(),
+            ),
         '/profile': (context) => const Profile(),
         '/settings': (context) => const Settings(),
         '/manualsHome': (context) => const ManualsHome(),
@@ -87,100 +102,169 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final double _height = 150;
-  final double _width = 200;
+  //initialized at 1 to start on the 'home' screen
+
+  int _selectedIndex = 1;
+
+  bool _firstUpdate = true;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _firstUpdate = false;
+    });
+  }
+
+  static final List<Widget> _pages = <Widget>[
+    const LessonsPage(),
+    Home(),
+    const FiltersHome()
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    //only done on first update - used to push argument to named path so that you can
+    //navigate to one of the pages
+    //ONLY NEEDED WHEN PUSHING NEW NAMED ROUTE - obsolete now, was used to get around pdf
+    //viewer problem
+    if (_firstUpdate) {
+      int _startingIndex = ModalRoute.of(context)?.settings.arguments != null
+          ? ModalRoute.of(context)?.settings.arguments as int
+          : _selectedIndex;
+
+      setState(() {
+        _selectedIndex = _startingIndex;
+      });
+      _firstUpdate = false;
+    }
+
     return Scaffold(
-      appBar: customAppBar(context, 'HomePage'),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Wrap(
-          spacing: 50.0,
-          runSpacing: 50.0,
-          children: <Widget>[
-            SizedBox(
-                height: _height,
-                width: _width,
-                child: TextButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(AppTheme.colors.darkBlue),
+        appBar: customAppBar(context, 'LIFE'),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(left: 250, right: 250, bottom: 30),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(color: AppTheme.colors.buttonBlue, width: 2),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: BottomNavyBar(
+                items: <BottomNavyBarItem>[
+                  BottomNavyBarItem(
+                    icon: const Icon(Icons.local_library),
+                    title: const Text('Learn'),
+                    activeColor: AppTheme.colors.buttonBlue,
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/filtersHome');
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)!.filter,
-                    style: const TextStyle(color: Colors.white),
+                  BottomNavyBarItem(
+                    icon: const Icon(Icons.house),
+                    title: const Text('Home'),
+                    activeColor: AppTheme.colors.buttonBlue,
                   ),
-                )),
-            SizedBox(
-                height: _height,
-                width: _width,
-                child: TextButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(AppTheme.colors.orange),
+                  BottomNavyBarItem(
+                    icon: const Icon(Icons.water_drop),
+                    title: const Text('Filter'),
+                    activeColor: AppTheme.colors.buttonBlue,
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/manualsHome');
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)!.manual,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                )),
-            SizedBox(
-                height: _height,
-                width: _width,
-                child: TextButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.green),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/lessonsPage');
-                  },
-                  child: const Text(
-                    'Lessons',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )),
-            SizedBox(
-                height: _height,
-                width: _width,
-                child: TextButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.purple),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/guidedLessons');
-                  },
-                  child: const Text(
-                    'Guided Adventures',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )),
-          ],
+                ],
+                selectedIndex: _selectedIndex, //New
+                onItemSelected: _onItemTapped,
+              ),
+            ),
+          ),
         ),
-      ),
-    );
+        body: _pages[_selectedIndex]);
   }
 }
 
-class TeacherPage extends StatelessWidget {
-  const TeacherPage({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  final double _height = 150;
+
+  final double _width = 200;
+
+  late TabController _myTabController;
+
+  void initState() {
+    super.initState();
+    _myTabController = TabController(vsync: this, initialIndex: 0, length: 3);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+        appBar: AppBar(
+            // flexibleSpace: ColoredBox(
+            //   color: AppTheme.colors.buttonBlue,
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.end,
+            //     children: [
+            //       TabBar(
+            //         labelColor: Colors.white,
+            //         indicatorColor: Colors.white,
+            //         controller: _myTabController,
+            //         tabs: const [
+            //           Tab(
+            //             text: 'Meet the Students',
+            //           ),
+            //           Tab(
+            //             text: 'Why a Filter?',
+            //           ),
+            //           Tab(
+            //             text: 'What we hope for you',
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            ),
+        body: // TabBarView(
+            //controller: _myTabController,
+            //children: const [
+            MeetTheStudents()
+        // Text('under construction'),
+        //  Text('under construction'),
+        // ],
+        // ),
+        );
+  }
+}
+
+class MeetTheStudents extends StatelessWidget {
+  const MeetTheStudents({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(left: 40, right: 40, top: 10),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            const Text(
+                'Hi, Welcome to your L.I.F.E. tablet & accompanying water filter! You\'re currently on the home page. Click on the buttons down below to go to the filter on the right, and the learning lessons, on the left.',
+                style: TextStyle(fontSize: 20)),
+            SizedBox(
+              height: 100,
+            ),
+            TitaTextBar(
+                length: 1,
+                happyBool: true,
+                text:
+                    'LIFE stands for LATAM Filter for Education and is a university project made by 5 engineering and 4 public health students! ')
+          ],
+        ));
   }
 }

@@ -223,65 +223,38 @@ class _FiltersHomeState extends State<FiltersHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context, 'Filter'),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            Align(
+            const Align(
               alignment: Alignment.topLeft,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
-                },
-                child: const Text('Go home!'),
-              ),
+              child: Text('Filter Page'),
             ),
+            const Text('Device Status: '),
+            Text(_connected ? 'Connected' : 'Disconnected',
+                style: _connected
+                    ? const TextStyle(color: Colors.green)
+                    : const TextStyle(color: Colors.red)),
             Wrap(children: [
               SizedBox(
-                width: 400,
+                //TODO: change this width
+                width: 600,
                 child: Column(children: [
                   Row(
                     children: [
+                      const Text('Pair A Device: '),
                       ElevatedButton(
                         onPressed: () {
                           FlutterBluetoothSerial.instance.openSettings();
                         },
                         child: const Text('Bluetooth settings'),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                AppTheme.colors.buttonBlue)),
                       ),
-                      Row(
-                        children: [
-                          const Text('Enable Bluetooth'),
-                          Switch(
-                            value: _bluetoothState.isEnabled,
-                            onChanged: (bool value) {
-                              future() async {
-                                if (value) {
-                                  await FlutterBluetoothSerial.instance
-                                      .requestEnable();
-                                } else {
-                                  await FlutterBluetoothSerial.instance
-                                      .requestDisable();
-                                }
-                                await getPairedDevices();
-                                _isButtonUnavailable = false;
-                                if (_connected) {
-                                  _disconnect();
-                                }
-                              }
-
-                              future().then((_) {
-                                setState(() {});
-                              });
-                            },
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text('Paired Devices'),
+                      const SizedBox(width: 10),
+                      const Text('Paired Devices: '),
                       DropdownButton(
                         items: _getDeviceItems(),
                         onChanged: (value) =>
@@ -294,7 +267,13 @@ class _FiltersHomeState extends State<FiltersHome> {
                             : _connected
                                 ? _disconnect
                                 : _connect,
-                        child: Text(_connected ? 'Disconnect' : 'Connect'),
+                        child: Text(_connected ? 'Disconnect' : 'Connect',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            )),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                AppTheme.colors.buttonBlue)),
                       ),
                       (_connecting
                           ? FittedBox(
@@ -308,17 +287,6 @@ class _FiltersHomeState extends State<FiltersHome> {
                   )
                 ]),
               ),
-              SizedBox(
-                  width: 200,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/manualsHome');
-                    },
-                    child: const Text(
-                      'Manual',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )),
             ]),
             Row(
               children: [
@@ -326,17 +294,12 @@ class _FiltersHomeState extends State<FiltersHome> {
                 const SizedBox(
                   width: 100,
                 ),
-                const Text('Device: '),
-                Text(_connected ? 'Connected' : 'Disconnected',
-                    style: _connected
-                        ? const TextStyle(color: Colors.green)
-                        : const TextStyle(color: Colors.red)),
               ],
             ),
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: (_connected)
+                  onPressed: (_connected && _collectingTask?.samples != null)
                       ? () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -350,8 +313,42 @@ class _FiltersHomeState extends State<FiltersHome> {
                           );
                         }
                       : null,
-                  child: const Text('Go to Background Page'),
+                  child: const Text(
+                    'Go to Data Page',
+                  ),
                 ),
+                Column(
+                  children: [
+                    SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/manualsHome');
+                          },
+                          child: const Text(
+                            'Initial Set Up',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  AppTheme.colors.buttonBlue)),
+                        )),
+                    SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/manualsHome');
+                          },
+                          child: const Text(
+                            'Refilling the Filter Tutorials',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  AppTheme.colors.buttonBlue)),
+                        )),
+                  ],
+                )
               ],
             ),
           ],

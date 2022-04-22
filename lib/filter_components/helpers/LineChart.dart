@@ -240,7 +240,8 @@ class _LineChartPainter extends CustomPainter {
   final double minimalHorizontalLabelsInterval;
 
   /// Maximal value of all data series values
-  double maxValue = -double.maxFinite;
+  /// Changed to 1 because if a 0 was passed as the first value it would crash.
+  double maxValue = 1;
 
   /// Minimal value of all data series values
   // Set to 0.0 for my purposes. When it was set to maxFinite it got very weird

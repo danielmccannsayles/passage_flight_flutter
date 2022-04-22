@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 application
-INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:3:4-33:19
+INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:3:4-34:19
 MERGED from [androidx.window:window:1.0.0-beta04] /Users/danielms/.gradle/caches/transforms-3/c291a541648cf1084eba3acf0d5d6a11/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.window:window:1.0.0-beta04] /Users/danielms/.gradle/caches/transforms-3/c291a541648cf1084eba3acf0d5d6a11/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.core:core:1.6.0] /Users/danielms/.gradle/caches/transforms-3/d118b71b31ac2018b0687bad4db3eb97/transformed/core-1.6.0/AndroidManifest.xml:24:5-89
@@ -12,11 +12,11 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/dani
 	android:name
 		INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml
 manifest
-ADDED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-34:12
-INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-34:12
-INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-34:12
-INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-34:12
-MERGED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-34:12
+ADDED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-35:12
+INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-35:12
+INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-35:12
+INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-35:12
+MERGED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-35:12
 MERGED from [:pdfx] /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/build/pdfx/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_bluetooth_serial] /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/build/flutter_bluetooth_serial/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-12:12
 MERGED from [:device_info_plus] /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/build/device_info_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-7:12
@@ -56,11 +56,11 @@ INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutt
 		INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/debug/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-34:12
+		ADDED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-35:12
 		INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/debug/AndroidManifest.xml
 	android:versionCode
 		INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-34:12
+		ADDED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:1-35:12
 		INJECTED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/debug/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/danielms/Desktop/Programming 2022-2023/passage_flight_flutter/android/app/src/main/AndroidManifest.xml:1:11-69

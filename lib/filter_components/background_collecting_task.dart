@@ -8,13 +8,15 @@ import 'dart:developer';
 class DataSample {
   double temperature1;
   double temperature2;
-  double waterpHlevel;
+  int waterHeight1;
+  int waterHeight2;
   DateTime timestamp;
 
   DataSample({
     required this.temperature1,
     required this.temperature2,
-    required this.waterpHlevel,
+    required this.waterHeight1,
+    required this.waterHeight2,
     required this.timestamp,
   });
 }
@@ -29,7 +31,7 @@ class BackgroundCollectingTask extends Model {
         rebuildOnChange: rebuildOnChange,
       );
 
-  final BluetoothConnection _connection;
+  final BluetoothConnection? _connection;
   List<int> _buffer = List<int>.empty(growable: true);
 
   // @TODO , Such sample collection in real code should be delegated
@@ -42,19 +44,21 @@ class BackgroundCollectingTask extends Model {
 
   BackgroundCollectingTask._fromConnection(this._connection) {
     log('starting');
-    _connection.input!.listen((data) {
+    _connection?.input!.listen((data) {
       _buffer += data;
       log(data.toString());
       log('test');
 
       while (true) {
+        log('checking for sample');
         // If there is a sample, and it is full sent
         int index = _buffer.indexOf('t'.codeUnitAt(0));
         if (index >= 0 && _buffer.length - index >= 7) {
           final DataSample sample = DataSample(
-              temperature1: (_buffer[index + 1] + _buffer[index + 2] / 100),
+              temperature1: (_buffer[index + 1]).toDouble(),
               temperature2: (_buffer[index + 3] + _buffer[index + 4] / 100),
-              waterpHlevel: (_buffer[index + 5] + _buffer[index + 6] / 100),
+              waterHeight2: (_buffer[index + 5]),
+              waterHeight1: (_buffer[index + 6]),
               timestamp: DateTime.now());
           _buffer.removeRange(0, index + 7);
 
@@ -64,10 +68,12 @@ class BackgroundCollectingTask extends Model {
         }
         // Otherwise break
         else {
+          log('break');
           break;
         }
       }
     }).onDone(() {
+      log('on Done');
       inProgress = false;
       notifyListeners();
     });
@@ -81,7 +87,7 @@ class BackgroundCollectingTask extends Model {
   }
 
   void dispose() {
-    _connection.dispose();
+    _connection?.dispose();
   }
 
   Future<void> start() async {
@@ -89,29 +95,29 @@ class BackgroundCollectingTask extends Model {
     _buffer.clear();
     samples.clear();
     notifyListeners();
-    _connection.output.add(ascii.encode('start'));
-    await _connection.output.allSent;
+    _connection?.output.add(ascii.encode('start'));
+    await _connection?.output.allSent;
   }
 
   Future<void> cancel() async {
     inProgress = false;
     notifyListeners();
-    _connection.output.add(ascii.encode('stop'));
-    await _connection.finish();
+    _connection?.output.add(ascii.encode('stop'));
+    await _connection?.finish();
   }
 
   Future<void> pause() async {
     inProgress = false;
     notifyListeners();
-    _connection.output.add(ascii.encode('stop'));
-    await _connection.output.allSent;
+    _connection?.output.add(ascii.encode('stop'));
+    await _connection?.output.allSent;
   }
 
   Future<void> reasume() async {
     inProgress = true;
     notifyListeners();
-    _connection.output.add(ascii.encode('start'));
-    await _connection.output.allSent;
+    _connection?.output.add(ascii.encode('start'));
+    await _connection?.output.allSent;
   }
 
   Iterable<DataSample> getLastOf(Duration duration) {

@@ -17,7 +17,7 @@ AppBar guidedAppBar(
       iconSize: 40,
       color: AppTheme.colors.darkBlue,
       onPressed: () {
-        Navigator.pushNamed(context, '/guidedLessons');
+        Navigator.pop(context);
       },
       tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
     ),

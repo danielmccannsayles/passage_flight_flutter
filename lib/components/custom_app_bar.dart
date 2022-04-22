@@ -5,45 +5,21 @@ import 'package:passage_flutter/theme/app_theme.dart';
 
 AppBar customAppBar(context, String title) {
   return AppBar(
-    leadingWidth: 260,
-    leading: Builder(
-      builder: (BuildContext context) {
-        return Row(children: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.menu),
-            iconSize: 50,
-            color: AppTheme.colors.darkBlue,
-            onPressed: () {
-              Navigator.pushNamed(context, '/settings');
-            },
-            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-          ),
-          // const SizedBox(
-          //   width: 39,
-          // ),
-          // ToggleSwitch(
-          //     initialLabelIndex: 1,
-          //     totalSwitches: 2,
-          //     labels: const ['English', 'Spanish'],
-          //     onToggle: (index) {
-          //       log('switched to: ' + index.toString());
-          //       switch (index) {
-          //         case 0:
-          //           {
-          //             MyApp.of(context)!.setLocale(
-          //                 const Locale.fromSubtags(languageCode: 'en'));
-          //           }
-          //           break;
-          //         case 1:
-          //           {
-          //             MyApp.of(context)!.setLocale(
-          //                 const Locale.fromSubtags(languageCode: 'es'));
-          //           }
-          //           break;
-          //       }
-          //     }),
-        ]);
-      },
+    leadingWidth: 200, //obsolete now..
+    leading: Padding(
+      padding: const EdgeInsets.all(20),
+      child: TextButton(
+          child: Row(children: const [
+            Icon(Icons.water_drop),
+            Text('100.3', style: TextStyle(color: Colors.black))
+          ]),
+          onPressed: null,
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.0),
+                      side: BorderSide(
+                          color: AppTheme.colors.darkBlue, width: 4))))),
     ),
     // TODO(daniel): https://stackoverflow.com/questions/62717682/stack-multiple-icons-to-flutter-iconbutton
 

@@ -74,6 +74,7 @@ class _QuizComponentState extends State<QuizComponent> {
     setState(() {
       _selectedAnswers[index] = answerIndex;
     });
+    log(_selectedAnswers.toString());
   }
 
   List<Widget> _createQuestions() {
@@ -86,17 +87,19 @@ class _QuizComponentState extends State<QuizComponent> {
         questions.add(Column(children: [
           Text(widget.questions[i]),
           Row(children: [
-            IconButton(
-                onPressed: () => {
-                      //if correct set to 99.
-                      //if incorrect set to 100.
-                      if (widget.allAnswers[i][0] ==
-                          widget.correctAnswers[i][0])
-                        {addAnswer(i, 99)}
-                      else
-                        {addAnswer(i, 100)}
-                    },
-                icon: const Icon(Icons.check_box)),
+            //TODO: FIX change to radiolisttile
+            // Checkbox(
+
+            //     onChanged: (value) => {
+            //           //if correct set to 99.
+            //           //if incorrect set to 100.
+            //           if (widget.allAnswers[i][0] ==
+            //               widget.correctAnswers[i][0])
+            //             {addAnswer(i, 99)}
+            //           else
+            //             {addAnswer(i, 100)}
+            //         },
+            //     ),
             //TODO: add a text input
           ])
         ]));
@@ -123,9 +126,9 @@ class _QuizComponentState extends State<QuizComponent> {
     super.initState();
     numQuestions = widget.questions.length;
     //numQuizzes+1 because index 0 is reserved for progress
-    _progressData = List.filled(widget.numQuizzes + 1, 0);
-    //TODO: see if progress Data needs to be initialized here or if it can be initialized in didChangeDependencies
-    log('_progressData initialized as: $_progressData');
+    // _progressData = List.filled(widget.numQuizzes + 1, 0);
+    // //TODO: see if progress Data needs to be initialized here or if it can be initialized in didChangeDependencies
+    // log('_progressData initialized as: $_progressData');
     _selectedAnswers = List.filled(numQuestions, 100);
   }
 

@@ -18,19 +18,19 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
 
   @override
   Widget build(BuildContext context) {
-    final BackgroundCollectingTask task =
+    final BackgroundCollectingTask? task =
         BackgroundCollectingTask.of(context, rebuildOnChange: true);
 
     // Arguments shift is needed for timestamps as miliseconds in double could loose precision.
-    final int argumentsShift =
-        task.samples.first.timestamp.millisecondsSinceEpoch;
+    final int? argumentsShift =
+        task?.samples.first.timestamp.millisecondsSinceEpoch;
 
     const Duration showDuration =
         Duration(hours: 1); // @TODO . show duration should be configurable
-    final Iterable<DataSample> lastSamples = task.getLastOf(showDuration);
+    final Iterable<DataSample>? lastSamples = task?.getLastOf(showDuration);
 
-    final Iterable<double> arguments = lastSamples.map((sample) {
-      return (sample.timestamp.millisecondsSinceEpoch - argumentsShift)
+    final Iterable<double>? arguments = lastSamples?.map((sample) {
+      return (sample.timestamp.millisecondsSinceEpoch - argumentsShift!)
           .toDouble();
     });
 
@@ -39,7 +39,7 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
         Duration(minutes: 5); // @TODO . step duration should be configurable
 
     // Find first timestamp floored to step before
-    final DateTime beginningArguments = lastSamples.first.timestamp;
+    final DateTime beginningArguments = lastSamples!.first.timestamp;
     DateTime beginningArgumentsStep = DateTime(beginningArguments.year,
         beginningArguments.month, beginningArguments.day);
     while (beginningArgumentsStep.isBefore(beginningArguments)) {
@@ -62,7 +62,7 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
     final Iterable<LabelEntry> argumentsLabels =
         argumentsLabelsTimestamps.map((timestamp) {
       return LabelEntry(
-          (timestamp.millisecondsSinceEpoch - argumentsShift).toDouble(),
+          (timestamp.millisecondsSinceEpoch - argumentsShift!).toDouble(),
           ((timestamp.hour <= 9 ? '0' : '') +
               timestamp.hour.toString() +
               ':' +
@@ -75,7 +75,7 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
           title: const Text('Collected data'),
           actions: <Widget>[
             // Progress circle
-            (task.inProgress
+            (task != null && task.inProgress
                 ? FittedBox(
                     child: Container(
                         margin: const EdgeInsets.all(16.0),
@@ -84,35 +84,24 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
                                 AlwaysStoppedAnimation<Color>(Colors.white))))
                 : Container(/* Dummy */)),
             // Start/stop buttons
-            (task.inProgress
+            (task != null && task.inProgress
                 ? IconButton(
                     icon: const Icon(Icons.pause), onPressed: task.pause)
                 : IconButton(
                     icon: const Icon(Icons.play_arrow),
-                    onPressed: task.reasume)),
+                    onPressed: task?.reasume)),
           ],
         ),
         body: ListView(
           children: <Widget>[
             const Divider(),
-            ListTile(
-                leading: const Icon(Icons.brightness_7),
-                title: const Text('1st Sensor'),
-                subtitle: Slider(
-                  label: '${_duration1.inHours}',
-                  divisions: 4,
-                  min: 1,
-                  max: 5,
-                  value: _duration1.inHours.toDouble(),
-                  onChanged: (value) => {
-                    setState(() {
-                      _duration1 = Duration(hours: value.toInt());
-                    })
-                  },
-                )),
+            const ListTile(
+                leading: Icon(Icons.brightness_7),
+                title: Text('TDS Sensor (Water Purity) '),
+                subtitle: Text("Unit: Parts per million")),
             LineChart(
               constraints: const BoxConstraints.expand(height: 350),
-              arguments: arguments,
+              arguments: arguments!,
               argumentsLabels: argumentsLabels,
               values: [
                 lastSamples.map((sample) => sample.temperature1),
@@ -134,8 +123,8 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
             const Divider(),
             const ListTile(
               leading: Icon(Icons.brightness_7),
-              title: Text('2nd Sensor'),
-              subtitle: Text('subtitle'),
+              title: Text('Flowrate Sensor (Measures speed of pump)'),
+              subtitle: Text("Unit: Meters per second"),
             ),
             LineChart(
               constraints: const BoxConstraints.expand(height: 350),
@@ -161,11 +150,27 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
             const Divider(),
             const ListTile(
               leading: Icon(Icons.filter_vintage),
-              title: Text('Testing stuff'),
+              title: Text('Reservoir 1'),
             ),
-            Text("Bool 1",
+            Text(
+                lastSamples.last.waterHeight1.toInt() == 1
+                    ? "Full"
+                    : "Not Full",
                 style: TextStyle(
-                    color: lastSamples.last.waterpHlevel.toInt() % 2 == 0
+                    color: lastSamples.last.waterHeight1 == 1
+                        ? Colors.green
+                        : Colors.red)),
+            const Divider(),
+            const ListTile(
+              leading: Icon(Icons.filter_vintage),
+              title: Text('Reservoir 2'),
+            ),
+            Text(
+                lastSamples.last.waterHeight2.toInt() == 1
+                    ? "Full"
+                    : "Not Full",
+                style: TextStyle(
+                    color: lastSamples.last.waterHeight2 == 1
                         ? Colors.green
                         : Colors.red))
           ],
