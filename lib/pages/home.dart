@@ -38,10 +38,17 @@ class _HomeState extends State<Home> {
             children: [
               const Text('Statistics:'),
               const SizedBox(width: 20),
-              TextButton(onPressed: () {}, child: const Text('Water Usage')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/lifetimeWater');
+                  },
+                  child: const Text('Water Usage')),
               const SizedBox(width: 20),
               TextButton(
-                  onPressed: () {}, child: const Text('Badges/Cosmetics')),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/trophyRoom');
+                  },
+                  child: const Text('Trophy Room')),
             ],
           ),
         ),
@@ -51,12 +58,20 @@ class _HomeState extends State<Home> {
             child: Wrap(
               children: [
                 TextButton(
-                    onPressed: () {}, child: const Text('Teacher Resources')),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/teacherResources');
+                    },
+                    child: const Text('Teacher Resources')),
                 TextButton(
-                    onPressed: () {}, child: const Text('Filter Resources')),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/filterResources');
+                    },
+                    child: const Text('Filter Resources')),
                 TextButton(
-                    onPressed: () {},
-                    child: const Text('About/More Resources')),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/aboutResources');
+                    },
+                    child: const Text('About L.I.F.E. / More Resources')),
               ],
             )),
       ],

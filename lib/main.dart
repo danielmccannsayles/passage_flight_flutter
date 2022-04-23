@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:passage_flutter/pages/awards_pages/lifetime_water.dart';
+import 'package:passage_flutter/pages/awards_pages/trophy_room.dart';
 import 'package:passage_flutter/pages/guided_lesson_pages/guided_lessons/science_lesson.dart';
 import 'package:passage_flutter/pages/home.dart';
-import 'package:passage_flutter/pages/lessons_page.dart';
+import 'package:passage_flutter/pages/learning_page.dart';
 
 import 'package:passage_flutter/pages/profile.dart';
 import 'package:passage_flutter/pages/resource_pages/about_resources.dart';
 import 'package:passage_flutter/pages/resource_pages/filter_resources.dart';
 import 'package:passage_flutter/pages/resource_pages/teacher_resources.dart';
-import 'package:passage_flutter/pages/settings.dart';
 import 'package:passage_flutter/pages/filter.dart';
-import 'package:passage_flutter/pages/manuals.dart';
 import 'package:passage_flutter/pages/welcome.dart';
 
 import 'package:passage_flutter/theme/app_theme.dart';
@@ -25,10 +25,7 @@ import 'pages/guided_lesson_pages/progress_model.dart';
 import 'pages/guided_lesson_pages/guided_lessons.dart';
 
 import 'package:flutter/services.dart';
-import './components/tita_text_bar.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-
-import 'dart:developer';
 
 //resource pages
 
@@ -72,15 +69,7 @@ class _MyAppState extends State<MyApp> {
               child: const MainNavigation(),
             ),
         '/profile': (context) => const Profile(),
-        '/settings': (context) => const Settings(),
-        '/manualsHome': (context) => const ManualsHome(),
-        '/filtersHome': (context) => const FiltersHome(),
         //lessons page has active state which is the progress.
-        '/lessonsPage': (context) => const LessonsPage(),
-        '/guidedLessons': (context) => ChangeNotifierProvider(
-              create: (context) => ProgressStore(),
-              child: const GuidedLessons(),
-            ),
         '/scienceLessonOne': (context) => ChangeNotifierProvider(
               create: (context) => ProgressStore(),
               child: const ScienceLesson(),
@@ -90,6 +79,8 @@ class _MyAppState extends State<MyApp> {
         '/filterResources': (context) => const FilterResources(),
         '/aboutResources': (context) => const AboutResources(),
         //Awards Pages
+        '/lifetimeWater': (context) => const LifetimeWater(),
+        '/trophyRoom': (context) => const TrophyRoom(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -129,7 +120,7 @@ class _MainNavigationState extends State<MainNavigation> {
   static final List<Widget> _pages = <Widget>[
     const WelcomePage(),
     const Home(),
-    const LessonsPage(),
+    const LearningPage(),
     const FiltersHome()
   ];
 

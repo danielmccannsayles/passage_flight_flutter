@@ -19,7 +19,6 @@ AppBar guidedAppBar(
       onPressed: () {
         Navigator.pop(context);
       },
-      tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
     ),
     bottom: PreferredSize(
         child: LinearProgressIndicator(
