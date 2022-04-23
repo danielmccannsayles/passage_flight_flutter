@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/pages/guided_lesson_pages/guided_lessons/science_lesson.dart';
+import 'package:passage_flutter/pages/home.dart';
 import 'package:passage_flutter/pages/lessons_page.dart';
 
 import 'package:passage_flutter/pages/profile.dart';
+import 'package:passage_flutter/pages/resource_pages/about_resources.dart';
+import 'package:passage_flutter/pages/resource_pages/filter_resources.dart';
+import 'package:passage_flutter/pages/resource_pages/teacher_resources.dart';
 import 'package:passage_flutter/pages/settings.dart';
 import 'package:passage_flutter/pages/filter.dart';
 import 'package:passage_flutter/pages/manuals.dart';
+import 'package:passage_flutter/pages/welcome.dart';
 
 import 'package:passage_flutter/theme/app_theme.dart';
 import '/components/custom_app_bar.dart';
@@ -24,6 +29,8 @@ import './components/tita_text_bar.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 import 'dart:developer';
+
+//resource pages
 
 void main() {
   // Call this manually before setpreferred orientation
@@ -62,7 +69,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => ChangeNotifierProvider(
               create: (context) => ProgressStore(),
-              child: const MyHomePage(),
+              child: const MainNavigation(),
             ),
         '/profile': (context) => const Profile(),
         '/settings': (context) => const Settings(),
@@ -78,6 +85,11 @@ class _MyAppState extends State<MyApp> {
               create: (context) => ProgressStore(),
               child: const ScienceLesson(),
             ),
+        //Resource Pages
+        '/teacherResources': (context) => const TeacherResources(),
+        '/filterResources': (context) => const FilterResources(),
+        '/aboutResources': (context) => const AboutResources(),
+        //Awards Pages
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -94,17 +106,16 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainNavigation> createState() => _MainNavigationState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  //initialized at 1 to start on the 'home' screen
-
-  int _selectedIndex = 1;
+class _MainNavigationState extends State<MainNavigation> {
+  //initialized at 0 to start on the welcome screen
+  int _selectedIndex = 0;
 
   bool _firstUpdate = true;
 
@@ -116,8 +127,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static final List<Widget> _pages = <Widget>[
+    const WelcomePage(),
+    const Home(),
     const LessonsPage(),
-    Home(),
     const FiltersHome()
   ];
 
@@ -146,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               border: Border.all(color: AppTheme.colors.buttonBlue, width: 2),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                     color: Colors.black38, spreadRadius: 0, blurRadius: 10),
               ],
@@ -156,13 +168,18 @@ class _MyHomePageState extends State<MyHomePage> {
               child: BottomNavyBar(
                 items: <BottomNavyBarItem>[
                   BottomNavyBarItem(
-                    icon: const Icon(Icons.local_library),
-                    title: const Text('Learn'),
+                    icon: const Icon(Icons.waving_hand),
+                    title: const Text('Welcome'),
                     activeColor: AppTheme.colors.buttonBlue,
                   ),
                   BottomNavyBarItem(
                     icon: const Icon(Icons.house),
                     title: const Text('Home'),
+                    activeColor: AppTheme.colors.buttonBlue,
+                  ),
+                  BottomNavyBarItem(
+                    icon: const Icon(Icons.local_library),
+                    title: const Text('Learn'),
                     activeColor: AppTheme.colors.buttonBlue,
                   ),
                   BottomNavyBarItem(
@@ -178,93 +195,5 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         body: _pages[_selectedIndex]);
-  }
-}
-
-class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  final double _height = 150;
-
-  final double _width = 200;
-
-  late TabController _myTabController;
-
-  void initState() {
-    super.initState();
-    _myTabController = TabController(vsync: this, initialIndex: 0, length: 3);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            // flexibleSpace: ColoredBox(
-            //   color: AppTheme.colors.buttonBlue,
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       TabBar(
-            //         labelColor: Colors.white,
-            //         indicatorColor: Colors.white,
-            //         controller: _myTabController,
-            //         tabs: const [
-            //           Tab(
-            //             text: 'Meet the Students',
-            //           ),
-            //           Tab(
-            //             text: 'Why a Filter?',
-            //           ),
-            //           Tab(
-            //             text: 'What we hope for you',
-            //           ),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            ),
-        body: // TabBarView(
-            //controller: _myTabController,
-            //children: const [
-            MeetTheStudents()
-        // Text('under construction'),
-        //  Text('under construction'),
-        // ],
-        // ),
-        );
-  }
-}
-
-class MeetTheStudents extends StatelessWidget {
-  const MeetTheStudents({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 40, right: 40, top: 10),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            const Text(
-                'Hi, Welcome to your L.I.F.E. tablet & accompanying water filter! You\'re currently on the home page. Click on the buttons down below to go to the filter on the right, and the learning lessons, on the left.',
-                style: TextStyle(fontSize: 20)),
-            SizedBox(
-              height: 100,
-            ),
-            TitaTextBar(
-                length: 1,
-                happyBool: true,
-                text:
-                    'LIFE stands for LATAM Filter for Education and is a university project made by 5 engineering and 4 public health students! ')
-          ],
-        ));
   }
 }
