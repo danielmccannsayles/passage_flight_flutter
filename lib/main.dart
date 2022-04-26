@@ -22,7 +22,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/guided_lesson_pages/data_storage/learning_progress_model.dart';
-import 'pages/guided_lesson_pages/guided_lessons.dart';
 
 import 'package:flutter/services.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';

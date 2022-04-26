@@ -14,6 +14,7 @@ class QuizComponent extends StatefulWidget {
   final List allAnswers;
   final List correctAnswers;
   final int numQuizzes;
+  final bool finalQuiz;
 
   //index starts at 1 - 0 should never be passed in.
   final int index;
@@ -22,6 +23,7 @@ class QuizComponent extends StatefulWidget {
 
   const QuizComponent(
       {Key? key,
+      required this.finalQuiz,
       required this.questions,
       required this.allAnswers,
       required this.correctAnswers,
@@ -63,8 +65,14 @@ class _QuizComponentState extends State<QuizComponent> {
       _quizFinished = 1;
     });
     log('submitted successfully');
-    Provider.of<LearningProgressStore>(context, listen: false)
-        .changeProgress(widget.lessonName, widget.index, 1);
+
+    //check if last quiz
+    if (widget.finalQuiz) {
+      Navigator.pushNamed(context, '/finish_page');
+    } else {
+      Provider.of<LearningProgressStore>(context, listen: false)
+          .changeProgress(widget.lessonName, widget.index, 1);
+    }
   }
 
   List<Widget> _createQuestions() {

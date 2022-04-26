@@ -142,6 +142,7 @@ class ScienceLessonState extends State<ScienceLesson> {
           index: 1,
           height: heightsList[0],
           lessonName: 'scienceOne',
+          finalQuiz: false,
         ),
         QuizComponent(
           questions: quizOneJson.questions,
@@ -151,6 +152,7 @@ class ScienceLessonState extends State<ScienceLesson> {
           index: 2,
           height: heightsList[1],
           lessonName: 'scienceOne',
+          finalQuiz: true,
         ),
         const SizedBox(
           height: 500,
