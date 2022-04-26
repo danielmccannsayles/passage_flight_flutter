@@ -32,10 +32,7 @@ class FinishPageState extends State<FinishPage> {
                           child: const Text(
                               'Check out your item in the Trophy Room')),
                       TextButton(
-                          onPressed: () => {
-                                //sends user to homepage (learning page argument)
-                                Navigator.pushNamed(context, '/', arguments: 2)
-                              },
+                          onPressed: () => {Navigator.pop(context)},
                           child: const Text('Go back to learning adventures'))
                     ],
                   ),
