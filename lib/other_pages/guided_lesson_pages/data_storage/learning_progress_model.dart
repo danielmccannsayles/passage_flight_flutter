@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:passage_flutter/pages/guided_lesson_pages/data_storage/easy_data.dart';
+import 'package:passage_flutter/other_pages/guided_lesson_pages/data_storage/easy_data.dart';
 
 import 'learning_progress_storage.dart';
 import 'dart:developer';

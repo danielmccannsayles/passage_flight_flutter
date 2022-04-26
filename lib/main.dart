@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:passage_flutter/pages/awards_pages/lifetime_water.dart';
-import 'package:passage_flutter/pages/awards_pages/trophy_room.dart';
-import 'package:passage_flutter/pages/guided_lesson_pages/guided_lessons/science_lesson.dart';
-import 'package:passage_flutter/pages/home.dart';
-import 'package:passage_flutter/pages/learning_page.dart';
-
-import 'package:passage_flutter/pages/profile.dart';
-import 'package:passage_flutter/pages/resource_pages/about_resources.dart';
-import 'package:passage_flutter/pages/resource_pages/filter_resources.dart';
-import 'package:passage_flutter/pages/resource_pages/teacher_resources.dart';
-import 'package:passage_flutter/pages/filter.dart';
-import 'package:passage_flutter/pages/welcome.dart';
+import 'package:passage_flutter/main_pages/filter.dart';
+import 'package:passage_flutter/main_pages/home.dart';
+import 'package:passage_flutter/main_pages/learning_page.dart';
+import 'package:passage_flutter/main_pages/welcome.dart';
+import 'package:passage_flutter/other_pages/awards_pages/lifetime_water.dart';
+import 'package:passage_flutter/other_pages/awards_pages/trophy_room.dart';
+import 'package:passage_flutter/other_pages/guided_lesson_pages/data_storage/learning_progress_model.dart';
+import 'package:passage_flutter/other_pages/guided_lesson_pages/guided_lessons/science_lesson.dart';
+import 'package:passage_flutter/other_pages/resource_pages/about_resources.dart';
+import 'package:passage_flutter/other_pages/resource_pages/filter_resources.dart';
+import 'package:passage_flutter/other_pages/resource_pages/teacher_resources.dart';
 
 import 'package:passage_flutter/theme/app_theme.dart';
 import '/components/custom_app_bar.dart';
@@ -20,8 +19,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //Every time pub get is run, implicilty or explicitly, the IDE thinks this package doesn't exist. Very annoying.
 
 import 'package:provider/provider.dart';
-
-import 'pages/guided_lesson_pages/data_storage/learning_progress_model.dart';
 
 import 'package:flutter/services.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
@@ -67,7 +64,6 @@ class _MyAppState extends State<MyApp> {
               create: (context) => LearningProgressStore(),
               child: const MainNavigation(),
             ),
-        '/profile': (context) => const Profile(),
         //lessons page has active state which is the progress.
         '/scienceLessonOne': (context) => ChangeNotifierProvider(
               create: (context) => LearningProgressStore(),
