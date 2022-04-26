@@ -31,13 +31,18 @@ AppBar guidedAppBar(
           style: const TextStyle(color: Colors.black)),
       TextButton(
         onPressed: () {
-          controller
-              .animateTo(0.0,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.fastOutSlowIn)
-              .then((_) {
-            clearProgress();
-          });
+          // controller
+          //     .animateTo(0.0,
+          //         duration: const Duration(milliseconds: 200),
+          //         curve: Curves.fastOutSlowIn)
+          //     .then((_) {
+          //   clearProgress();
+          // });
+          showDialog(
+            context: context,
+            builder: (BuildContext context) =>
+                _buildAlert(context, clearProgress, controller),
+          );
         },
         child: const Text('Reset Progress'),
       ),
@@ -73,5 +78,47 @@ AppBar guidedAppBar(
       statusBarIconBrightness: Brightness.dark,
       statusBarColor: Color(0xffDDF5FF), // Status bar
     ),
+  );
+}
+
+Widget _buildAlert(BuildContext context, Function() _clearProgress,
+    ScrollController _controller) {
+  return AlertDialog(
+    title: const Text('Reset Progress?'),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Text(
+            "Are you sure you want to reset your progress in this learning adventure?"),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('No'),
+        ),
+        TextButton(
+          onPressed: () {
+            _controller
+                .animateTo(0.0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.fastOutSlowIn)
+                .then((_) {
+              _clearProgress();
+            });
+            Navigator.of(context).pop();
+          },
+          child: const Text('Yes'),
+        ),
+      ],
+    ),
+    actions: <Widget>[
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('Close'),
+      ),
+    ],
   );
 }

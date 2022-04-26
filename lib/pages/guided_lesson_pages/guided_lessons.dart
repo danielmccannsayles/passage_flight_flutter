@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:passage_flutter/theme/app_theme.dart';
 import '../../components/custom_app_bar.dart';
 
-import './progress_model.dart';
+import 'data_storage/learning_progress_model.dart';
 import 'package:provider/provider.dart';
 
 class GuidedLessons extends StatefulWidget {
@@ -34,7 +34,7 @@ class _GuidedLessonsState extends State<GuidedLessons> {
                     padding: const EdgeInsets.all(10),
                     child: Column(children: [
                       const Text('Science Lesson One'),
-                      Text(Provider.of<ProgressStore>(context)
+                      Text(Provider.of<LearningProgressStore>(context)
                           .getProgressData()
                           .scienceOne[0]
                           .toString()),
@@ -43,7 +43,7 @@ class _GuidedLessonsState extends State<GuidedLessons> {
                           child: LinearProgressIndicator(
                             color: Colors.blue,
                             backgroundColor: AppTheme.colors.lightBlue,
-                            value: Provider.of<ProgressStore>(context)
+                            value: Provider.of<LearningProgressStore>(context)
                                     .getProgressData()
                                     .scienceOne[0]
                                     .toDouble() /

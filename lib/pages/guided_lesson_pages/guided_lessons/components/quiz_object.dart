@@ -3,9 +3,9 @@ class QuizJson {
   // required List allAnswers,
   // required List correctAnswers
 
-  List questions;
-  List allAnswers;
-  List correctAnswers;
+  List<String> questions;
+  List<List> allAnswers;
+  List<String> correctAnswers;
 
   QuizJson(this.questions, this.allAnswers, this.correctAnswers);
 }

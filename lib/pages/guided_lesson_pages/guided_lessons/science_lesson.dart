@@ -6,7 +6,7 @@ import 'dart:developer';
 import 'components/guided_app_bar.dart';
 
 import 'components/quiz_component.dart';
-import '../progress_model.dart';
+import '../data_storage/learning_progress_model.dart';
 import 'package:provider/provider.dart';
 import 'components/quiz_object.dart';
 
@@ -22,7 +22,9 @@ final quizOneJson = QuizJson([
   "6"
 ]);
 
-final heightsList = <double>[600, 600];
+//TODO: See if I can remove this somehow
+//used to tell the quiz component how big it can be (necessary bc scroll)
+final heightsList = <double>[700, 700];
 
 //Begin science lesson widget
 class ScienceLesson extends StatefulWidget {
@@ -53,7 +55,7 @@ class ScienceLessonState extends State<ScienceLesson> {
  _progressVisual should be calculated like this: 
   Iterate through the progress data for the lesson, starting at 1. 
   */
-  int _progressVisual = 0;
+  late List _progressVisual;
 
   //defined in WidgetsBinding so as not to query scrollController before it attaches
   double _scrollHeight = 0;
@@ -63,37 +65,41 @@ class ScienceLessonState extends State<ScienceLesson> {
   void clearProgress() {
     setState(() {
       _currentProgress = 0;
-      _progressVisual = 0;
-      Provider.of<ProgressStore>(context, listen: false)
+      _progressVisual = List.filled(_progressVisual.length, 0);
+      Provider.of<LearningProgressStore>(context, listen: false)
           .clearProgress('scienceOne');
     });
   }
 
-  VoidCallback? updateScroll(double value) {
-    setState(() {
-      _scrollPosition = value;
-      if (_scrollPosition > _currentProgress) {
-        _currentProgress = _scrollPosition;
-        //This is effective integer division - turns it from double to int while dividing
-        _progressVisual = _currentProgress * 100 ~/ _scrollHeight;
-        log('new progress reached: $_currentProgress');
+  // VoidCallback? updateScroll(double value) {
+  //   setState(() {
+  //     _scrollPosition = value;
+  //     if (_scrollPosition > _currentProgress) {
+  //       _currentProgress = _scrollPosition;
+  //       //This is effective integer division - turns it from double to int while dividing
+  //       _progressVisual = _currentProgress * 100 ~/ _scrollHeight;
+  //       log('new progress reached: $_currentProgress');
 
-        Provider.of<ProgressStore>(context, listen: false)
-            .changeProgress('scienceOne', 0, _progressVisual);
-      }
-    });
-    return null;
-  }
+  //       Provider.of<ProgressStore>(context, listen: false)
+  //           .changeProgress('scienceOne', 0, _progressVisual);
+  //     }
+  //   });
+  //   return null;
+  // }
 
   //In didChange Dependencies context is bound so we can use Provider.of(context)
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _progressVisual =
-        Provider.of<ProgressStore>(context).getProgressData().scienceOne[0];
+    _progressVisual = Provider.of<LearningProgressStore>(context)
+        .getProgressData()
+        .scienceOne;
 
-    _currentProgress = _progressVisual / 100 * _scrollHeight;
+    //broke into three lines bc it wasn't working idk why
+    _currentProgress = _progressVisual.fold(0, (t, c) => t + c);
+    _currentProgress /= _progressVisual.length;
+    _currentProgress.toInt();
 
     log('_progressvisual changed to: $_progressVisual');
   }
@@ -104,21 +110,18 @@ class ScienceLessonState extends State<ScienceLesson> {
     //Define normal progress here real quick by inverting the other formula
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      _currentProgress = _progressVisual / 100 * _scrollHeight;
+      // _currentProgress = _progressVisual / 100 * _scrollHeight;
 
       if (_scrollController.hasClients) {
-        //set scroll to current position
-        _scrollController.jumpTo(_currentProgress);
-        log('test scorll contt');
+        //set scroll to current position when it starts
+        //TODO: find where to scroll to
+        //TODO: _scrollController.jumpTo(_currentProgress);
 
-        //add listener
-        _scrollController.addListener(
-            () => throttle.setValue(_scrollController.position.pixels));
-
+        //obselete?
         _scrollHeight = _scrollController.position.viewportDimension +
             heightsList.fold(0, (t, c) => t + c);
 
-        throttle.values.listen((value) => updateScroll(value));
+        // throttle.values.listen((value) => updateScroll(value));
       }
     });
   }
@@ -127,7 +130,7 @@ class ScienceLessonState extends State<ScienceLesson> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: guidedAppBar(context, 'Science Lesson One', _currentProgress,
-          _scrollController, _progressVisual, clearProgress),
+          _scrollController, _currentProgress.toInt(), clearProgress),
       body: ListView(controller: _scrollController, children: [
         const Text(
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque accumsan libero a lacinia fermentum. Mauris ac tellus et ante fringilla faucibus. Quisque hendrerit odio non magna posuere, sed accumsan nisi rutrum. Suspendisse quis tempor magna. Nullam velit elit, lobortis elementum molestie et, hendrerit ultricies magna. Etiam est leo, bibendum nec feugiat sed, varius in sem. Morbi imperdiet gravida libero, euismod eleifend nisl interdum ut. In nec est turpis. Duis commodo turpis nulla, at tempor felis vehicula nec. Nulla libero velit, mollis ac risus ac, fringilla luctus urna. Integer dapibus efficitur facilisis. Nullam malesuada turpis et lorem vehicula varius. Aliquam luctus, nisi sed dictum vulputate, risus nulla tempor felis, sit amet mattis ante purus quis enim. Fusce malesuada et orci non ullamcorper. Vivamus vel urna ipsum. Praesent eget vestibulum justo. Aenean luctus risus dui, lobortis dapibus nisl vulputate nec. Cras iaculis neque eget porta lobortis. Etiam in mi at dui finibus venenatis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas varius metus eu ipsum pretium molestie nec et ante. Aliquam pharetra metus in ornare tincidunt. Donec bibendum efficitur purus sit amet pretium. Nam quis bibendum sapien. Aenean fermentum venenatis felis, in tristique turpis imperdiet vitae. Sed venenatis pretium elementum. Morbi vehicula convallis laoreet. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla fringilla suscipit est, eu lobortis ex faucibus sed. Curabitur nisi nulla, consectetur et dignissim euismod, porttitor efficitur purus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam congue, nulla sed sollicitudin posuere, ipsum velit tempus mi, sed fermentum dolor tellus quis sem. In sagittis nisl non quam blandit feugiat. Mauris a ex eu nibh vestibulum ornare sed nec massa. Praesent rutrum mollis tortor. Aenean urna erat, semper eu lorem ut, sollicitudin condimentum massa. Donec mollis eros vitae nunc consectetur, at pretium ante varius. Aliquam nec varius dolor. Mauris sollicitudin tortor sed magna pellentesque molestie. Proin enim urna, maximus eu imperdiet non, vehicula sit amet quam. Sed feugiat, ligula ac feugiat venenatis, nisl arcu accumsan mauris, non lobortis velit dui sit amet diam. Cras eget turpis placerat, euismod ex at, condimentum sapien. Nam scelerisque viverra lorem, molestie finibus erat auctor vitae. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam fringilla molestie nulla eget suscipit. Aliquam sit amet leo dui. Pellentesque laoreet turpis vitae urna bibendum, non accumsan nunc tristique. Mauris at ipsum sit amet ipsum laoreet venenatis. Donec id orci vel ante ultrices varius at id urna. Nulla aliquam est sed diam sagittis, in facilisis est fermentum. Etiam luctus bibendum diam, id ultrices lacus ornare vitae.'),

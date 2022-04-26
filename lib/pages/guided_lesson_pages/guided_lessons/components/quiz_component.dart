@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../progress_model.dart';
+import '../../data_storage/learning_progress_model.dart';
 import 'dart:developer';
 
 /*Quiz Component. Used in lesson modules. Requires many parameters, including a defined height.
@@ -47,75 +47,55 @@ class _QuizComponentState extends State<QuizComponent> {
   //If it's fill in the blank, give a 100 if it's wrong, and a 99 if it's right
   //it's wrong
   late List<int> _selectedAnswers;
+  late List<String> _selectedStringAnswers;
 
-  int quizFinished = 0;
+  int _quizFinished = 0;
 
-  //TODO: test submit function
   void submit() {
+    log('submitting..');
     for (int i = 0; i < numQuestions; i++) {
-      if (_selectedAnswers[i] == 99) {
-        //do nothing - it was right & fill in the blank
-      } else if (_selectedAnswers[i] == 100) {
-        //it was fill in the blank and wrong
-        return;
-      }
-      //It was multiple choice, try it out
-      else if (widget.allAnswers[_selectedAnswers[i]] !=
-          widget.correctAnswers[i]) {
+      if (_selectedStringAnswers[i] != widget.correctAnswers[i]) {
         return;
       }
     }
-    //We got to the end so update the progress.
-    Provider.of<ProgressStore>(context, listen: false)
-        .changeProgress(widget.lessonName, widget.index, 1);
-  }
-
-  void addAnswer(int index, int answerIndex) {
+    //We got to the end so all answers were correct
     setState(() {
-      _selectedAnswers[index] = answerIndex;
+      _quizFinished = 1;
     });
-    log(_selectedAnswers.toString());
+    log('submitted successfully');
+    Provider.of<LearningProgressStore>(context, listen: false)
+        .changeProgress(widget.lessonName, widget.index, 1);
   }
 
   List<Widget> _createQuestions() {
     List<Widget> questions = [];
     List<Widget> answers = [];
     for (int i = 0; i < numQuestions; i++) {
-      //if length == 1 then it's a fill in the blank
       int length = widget.allAnswers[i].length;
+      //if length == 1 then it's a fill in the blank
       if (length == 1) {
         questions.add(Column(children: [
           Text(widget.questions[i]),
-          Row(children: [
-            //TODO: FIX change to radiolisttile
-            // Checkbox(
-
-            //     onChanged: (value) => {
-            //           //if correct set to 99.
-            //           //if incorrect set to 100.
-            //           if (widget.allAnswers[i][0] ==
-            //               widget.correctAnswers[i][0])
-            //             {addAnswer(i, 99)}
-            //           else
-            //             {addAnswer(i, 100)}
-            //         },
-            //     ),
-            //TODO: add a text input
-          ])
         ]));
       } else {
-        answers = []; //clear answers each round
+        answers = []; //start w/ blank answers then fill them in
         for (int j = 0; j < widget.allAnswers[i].length; j++) {
-          answers.add(Row(children: [
-            IconButton(
-                onPressed: () => addAnswer(i, j),
-                icon: const Icon(Icons.check_box)),
-            Text(widget.allAnswers[i][j]),
-          ]));
+          answers.add(RadioListTile<String>(
+              title: Text(widget.allAnswers[i][j]),
+              value: widget.allAnswers[i][j],
+              groupValue: _selectedStringAnswers[i],
+              onChanged: (String? value) {
+                setState(() {
+                  _selectedStringAnswers[i] = value!;
+                });
+              }));
         }
         //at the end of each iteration of i add the question to
-        questions
-            .add(Column(children: [Text(widget.questions[i]), ...answers]));
+        questions.add(Column(children: [
+          Text(widget.questions[i]),
+          ...answers,
+          Text(_selectedStringAnswers[i]),
+        ]));
       }
     }
     return questions;
@@ -130,12 +110,13 @@ class _QuizComponentState extends State<QuizComponent> {
     // //TODO: see if progress Data needs to be initialized here or if it can be initialized in didChangeDependencies
     // log('_progressData initialized as: $_progressData');
     _selectedAnswers = List.filled(numQuestions, 100);
+    _selectedStringAnswers = List.filled(numQuestions, '');
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final _storage = Provider.of<ProgressStore>(context);
+    final _storage = Provider.of<LearningProgressStore>(context);
 
     setState(() {
       //has to be mapped so we can pass a dynamic parameter and get back a value.
@@ -156,8 +137,7 @@ class _QuizComponentState extends State<QuizComponent> {
             borderRadius: BorderRadius.circular(20)),
         child: Column(
           children: [
-            const Text('hey'),
-            const Text('Quiz:'),
+            Text('Quiz:' + widget.index.toString()),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -165,16 +145,20 @@ class _QuizComponentState extends State<QuizComponent> {
                     _createQuestions(), // <<<<< Note this change for the return type
               ),
             ),
+            _quizFinished == 0
+                ? TextButton(
+                    onPressed: submit, child: const Text('Submit Quiz'))
+                : const Text('Finished'),
             Text('ProgressData: ${_progressData[widget.index]}'),
             TextButton(
                 onPressed: () {
-                  Provider.of<ProgressStore>(context, listen: false)
+                  Provider.of<LearningProgressStore>(context, listen: false)
                       .changeProgress(widget.lessonName, widget.index, 1);
                 },
                 child: const Text('Correct (1)')),
             TextButton(
                 onPressed: () {
-                  Provider.of<ProgressStore>(context, listen: false)
+                  Provider.of<LearningProgressStore>(context, listen: false)
                       .changeProgress(widget.lessonName, widget.index, 0);
                 },
                 child: const Text('False (0)')),
