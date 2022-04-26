@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:passage_flutter/theme/app_theme.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 AppBar guidedAppBar(
     context,
     String title,
-    double progressValue,
-    ScrollController controller,
+    Function scrollToCurrent,
+    ItemScrollController controller,
     int progressVisual,
     void Function() clearProgress) {
   return AppBar(
@@ -48,9 +49,7 @@ AppBar guidedAppBar(
       ),
       TextButton(
         onPressed: () {
-          controller.animateTo(progressValue,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.fastOutSlowIn);
+          scrollToCurrent();
         },
         child: const Text('Current Progress'),
       ),
@@ -82,7 +81,7 @@ AppBar guidedAppBar(
 }
 
 Widget _buildAlert(BuildContext context, Function() _clearProgress,
-    ScrollController _controller) {
+    ItemScrollController _controller) {
   return AlertDialog(
     title: const Text('Reset Progress?'),
     content: Column(
@@ -99,13 +98,7 @@ Widget _buildAlert(BuildContext context, Function() _clearProgress,
         ),
         TextButton(
           onPressed: () {
-            _controller
-                .animateTo(0.0,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.fastOutSlowIn)
-                .then((_) {
-              _clearProgress();
-            });
+            _clearProgress();
             Navigator.of(context).pop();
           },
           child: const Text('Yes'),

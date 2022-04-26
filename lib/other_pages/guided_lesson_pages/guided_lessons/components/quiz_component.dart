@@ -15,14 +15,16 @@ class QuizComponent extends StatefulWidget {
   final List correctAnswers;
   final int numQuizzes;
   final bool finalQuiz;
+  final Function clearProgress;
 
-  //index starts at 1 - 0 should never be passed in.
+  //index starts at 0!!!
   final int index;
   final String lessonName;
   final double height;
 
   const QuizComponent(
       {Key? key,
+      required this.clearProgress,
       required this.finalQuiz,
       required this.questions,
       required this.allAnswers,
@@ -68,7 +70,10 @@ class _QuizComponentState extends State<QuizComponent> {
 
     //check if last quiz
     if (widget.finalQuiz) {
-      Navigator.pushNamed(context, '/finish_page');
+      _quizFinished = 0;
+      widget.clearProgress;
+      _selectedAnswers = List.filled(_selectedAnswers.length, 0);
+      Navigator.pushNamed(context, '/finishPage');
     } else {
       Provider.of<LearningProgressStore>(context, listen: false)
           .changeProgress(widget.lessonName, widget.index, 1);
@@ -129,6 +134,7 @@ class _QuizComponentState extends State<QuizComponent> {
     setState(() {
       //has to be mapped so we can pass a dynamic parameter and get back a value.
       //VERY ANNOYING YOU suck fluTTer
+      _selectedAnswers = _storage.getProgressData().get(widget.lessonName);
       _progressData = _storage.getProgressData().get(widget.lessonName);
       log('_progressData changed to: $_progressData');
     });
@@ -137,7 +143,7 @@ class _QuizComponentState extends State<QuizComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: widget.height,
+        // height: widget.height,
         decoration: BoxDecoration(
             border: Border.all(
               color: Colors.red,

@@ -27,6 +27,8 @@ class LearningProgressStorage {
   Future<EasyData> readProgress() async {
     //TODO: If getting an error after adding 0's to the list then comment out
     //some of this - it's probably looking at old data that was saved.
+    //run this when needed to reset
+    // return EasyData(mathOne: [0, 0], scienceOne: [0, 0]);
     try {
       final file = await _localFile;
 
