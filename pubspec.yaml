@@ -45,6 +45,7 @@ dependencies:
   flutter_svg: ^1.0.3
   bottom_navy_bar: ^6.0.0
   scrollable_positioned_list: ^0.2.3
+  pin_code_text_field: ^1.8.0
 
 
   # The following adds the Cupertino Icons font to your application.

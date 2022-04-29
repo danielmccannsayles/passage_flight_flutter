@@ -32,13 +32,6 @@ AppBar guidedAppBar(
           style: const TextStyle(color: Colors.black)),
       TextButton(
         onPressed: () {
-          // controller
-          //     .animateTo(0.0,
-          //         duration: const Duration(milliseconds: 200),
-          //         curve: Curves.fastOutSlowIn)
-          //     .then((_) {
-          //   clearProgress();
-          // });
           showDialog(
             context: context,
             builder: (BuildContext context) =>

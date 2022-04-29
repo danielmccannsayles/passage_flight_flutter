@@ -18,19 +18,39 @@ class TrophyRoomState extends State<TrophyRoom> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    _trophyList =
-        Provider.of<TrophyProgressStore>(context).getTrophyData().trophies;
+    setState(() {
+      _trophyList =
+          Provider.of<TrophyProgressStore>(context).getTrophyData().trophies;
+    });
 
     log('_trophy list changed to: $_trophyList');
   }
 
   List<Widget> _getImageList() {
     List<Widget> list = [];
-    for (var el in _trophyList) {
-      list.add(el == 1
-          ? const Image(image: AssetImage('trophyImages/checkmark.jpg'))
-          : const Image(image: AssetImage('trophyImages/redx.jpg')));
+    for (int i = 0; i < _trophyList.length; i++) {
+      list.add(Column(children: [
+        _trophyList[i] == 1
+            ? const Image(
+                image: AssetImage('assets/trophyImages/checkmark.jpg'),
+                height: 30,
+                width: 30)
+            : const Image(
+                image: AssetImage('assets/trophyImages/redx.jpg'),
+                height: 30,
+                width: 30,
+              ),
+        //button for testing that trophy saving is working:)
+        TextButton(
+            onPressed: () {
+              _trophyList[i] == 0
+                  ? Provider.of<TrophyProgressStore>(context, listen: false)
+                      .addTrophy(i)
+                  : Provider.of<TrophyProgressStore>(context, listen: false)
+                      .subtractTrophy(i);
+            },
+            child: const Text("Turn on or off")),
+      ]));
     }
     return list;
   }
@@ -45,10 +65,14 @@ class TrophyRoomState extends State<TrophyRoom> {
                 child: Column(
                   children: [
                     const Text('Trophy Page'),
-                    Wrap(
-                      direction: Axis.horizontal,
-                      children: _getImageList(),
-                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          children: _getImageList(),
+                        ),
+                      ),
+                    )
                   ],
                 ))));
   }

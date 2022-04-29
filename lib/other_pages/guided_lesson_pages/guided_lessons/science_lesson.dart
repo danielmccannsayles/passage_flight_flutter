@@ -84,15 +84,17 @@ class ScienceLessonState extends State<ScienceLesson> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _progressArray = Provider.of<LearningProgressStore>(context)
-        .getProgressData()
-        .scienceOne;
+    setState(() {
+      _progressArray = Provider.of<LearningProgressStore>(context)
+          .getProgressData()
+          .scienceOne;
 
-    //broke into three lines bc it wasn't working idk why
-    _currentProgress = _progressArray.fold(0, (t, c) => t + c);
-    _currentProgress /= _progressArray.length;
-    _currentProgress * 100;
-    _currentProgress.toInt();
+      //broke into three lines bc it wasn't working idk why
+      _currentProgress = _progressArray.fold(0, (t, c) => t + c);
+      _currentProgress /= _progressArray.length;
+      _currentProgress * 100;
+      _currentProgress.toInt();
+    });
 
     log('_progressvisual changed to: $_progressArray');
   }

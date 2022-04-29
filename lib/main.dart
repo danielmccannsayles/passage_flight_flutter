@@ -6,10 +6,12 @@ import 'package:passage_flutter/main_pages/welcome.dart';
 import 'package:passage_flutter/other_pages/awards_pages/lifetime_water.dart';
 import 'package:passage_flutter/other_pages/awards_pages/trophy_data_storage/trophy_progress_model.dart';
 import 'package:passage_flutter/other_pages/awards_pages/trophy_room.dart';
+import 'package:passage_flutter/other_pages/awards_pages/water_data_storage/water_model.dart';
 import 'package:passage_flutter/other_pages/guided_lesson_pages/data_storage/learning_progress_model.dart';
 import 'package:passage_flutter/other_pages/guided_lesson_pages/guided_lessons/components/finish_page.dart';
 import 'package:passage_flutter/other_pages/guided_lesson_pages/guided_lessons/science_lesson.dart';
 import 'package:passage_flutter/other_pages/resource_pages/about_resources.dart';
+import 'package:passage_flutter/other_pages/resource_pages/admin_page.dart';
 import 'package:passage_flutter/other_pages/resource_pages/filter_resources.dart';
 import 'package:passage_flutter/other_pages/resource_pages/teacher_resources.dart';
 
@@ -76,12 +78,16 @@ class _MyAppState extends State<MyApp> {
         '/filterResources': (context) => const FilterResources(),
         '/aboutResources': (context) => const AboutResources(),
         //Awards Pages
-        '/lifetimeWater': (context) => const LifetimeWater(),
+        '/lifetimeWater': (context) => ChangeNotifierProvider(
+              create: (context) => WaterStore(),
+              child: const LifetimeWater(),
+            ),
         '/trophyRoom': (context) => ChangeNotifierProvider(
               create: (context) => TrophyProgressStore(),
               child: const TrophyRoom(),
             ),
         '/finishPage': (context) => const FinishPage(),
+        '/adminPage': (context) => const AdminPage(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,

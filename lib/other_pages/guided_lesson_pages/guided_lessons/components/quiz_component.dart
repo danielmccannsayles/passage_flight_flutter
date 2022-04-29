@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:passage_flutter/other_pages/awards_pages/trophy_data_storage/trophy_progress_model.dart';
 import 'package:provider/provider.dart';
 import '../../data_storage/learning_progress_model.dart';
 import 'dart:developer';
+import 'dart:math' hide log; //using log for development
 
 /*Quiz Component. Used in lesson modules. Requires many parameters, including a defined height.
 Defined height is because the lesson needs to know height to calculate progress made. 
@@ -80,6 +82,13 @@ class _QuizComponentState extends State<QuizComponent> {
     }
   }
 
+  void generateTrophy() {
+    Random _random = Random();
+    int _number = _random.nextInt(49);
+
+    Provider.of<TrophyProgressStore>(context, listen: false).addTrophy(_number);
+  }
+
   List<Widget> _createQuestions() {
     List<Widget> questions = [];
     List<Widget> answers = [];
@@ -103,7 +112,7 @@ class _QuizComponentState extends State<QuizComponent> {
                 });
               }));
         }
-        //at the end of each iteration of i add the question to
+        //at the end of each iteration of i add the question as well
         questions.add(Column(children: [
           Text(widget.questions[i]),
           ...answers,
@@ -118,10 +127,6 @@ class _QuizComponentState extends State<QuizComponent> {
   void initState() {
     super.initState();
     numQuestions = widget.questions.length;
-    //numQuizzes+1 because index 0 is reserved for progress
-    // _progressData = List.filled(widget.numQuizzes + 1, 0);
-    // //TODO: see if progress Data needs to be initialized here or if it can be initialized in didChangeDependencies
-    // log('_progressData initialized as: $_progressData');
     _selectedAnswers = List.filled(numQuestions, 100);
     _selectedStringAnswers = List.filled(numQuestions, '');
   }
@@ -132,8 +137,7 @@ class _QuizComponentState extends State<QuizComponent> {
     final _storage = Provider.of<LearningProgressStore>(context);
 
     setState(() {
-      //has to be mapped so we can pass a dynamic parameter and get back a value.
-      //VERY ANNOYING YOU suck fluTTer
+      //get() is the mapped version. Idk why I'm using it here I forget
       _selectedAnswers = _storage.getProgressData().get(widget.lessonName);
       _progressData = _storage.getProgressData().get(widget.lessonName);
       log('_progressData changed to: $_progressData');
@@ -155,8 +159,7 @@ class _QuizComponentState extends State<QuizComponent> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                children:
-                    _createQuestions(), // <<<<< Note this change for the return type
+                children: _createQuestions(),
               ),
             ),
             _quizFinished == 0
