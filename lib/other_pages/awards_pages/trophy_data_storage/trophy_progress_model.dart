@@ -13,6 +13,7 @@ class TrophyProgressStore extends ChangeNotifier {
 
   void clearTrophies() {
     _trophyData = DataClass(trophies: List.filled(50, 0));
+    log('trophies cleared');
 
     progressStorage.writeTrophies(_trophyData);
     notifyListeners();

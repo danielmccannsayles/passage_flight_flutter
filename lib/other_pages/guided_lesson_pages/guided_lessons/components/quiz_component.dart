@@ -72,21 +72,23 @@ class _QuizComponentState extends State<QuizComponent> {
 
     //check if last quiz
     if (widget.finalQuiz) {
+      int _trophyIndex = generateTrophy();
       _quizFinished = 0;
       widget.clearProgress;
       _selectedAnswers = List.filled(_selectedAnswers.length, 0);
-      Navigator.pushNamed(context, '/finishPage');
+      Navigator.pushNamed(context, '/finishPage', arguments: _trophyIndex);
     } else {
       Provider.of<LearningProgressStore>(context, listen: false)
           .changeProgress(widget.lessonName, widget.index, 1);
     }
   }
 
-  void generateTrophy() {
+  int generateTrophy() {
     Random _random = Random();
     int _number = _random.nextInt(49);
 
     Provider.of<TrophyProgressStore>(context, listen: false).addTrophy(_number);
+    return _number;
   }
 
   List<Widget> _createQuestions() {

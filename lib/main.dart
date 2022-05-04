@@ -64,6 +64,7 @@ class _MyAppState extends State<MyApp> {
       title: 'LIFE APP',
       initialRoute: '/',
       routes: {
+        //TODO: possibly just put all the providers above everything? Idrk but it seems messy rn
         '/': (context) => ChangeNotifierProvider(
               create: (context) => LearningProgressStore(),
               child: const MainNavigation(),
@@ -87,7 +88,11 @@ class _MyAppState extends State<MyApp> {
               child: const TrophyRoom(),
             ),
         '/finishPage': (context) => const FinishPage(),
-        '/adminPage': (context) => const AdminPage(),
+        '/adminPage': (context) => MultiProvider(providers: [
+              ChangeNotifierProvider(
+                  create: (context) => TrophyProgressStore()),
+              ChangeNotifierProvider(create: (context) => WaterStore()),
+            ], child: const AdminPage()),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,

@@ -9,10 +9,16 @@ class FinishPage extends StatefulWidget {
 }
 
 class FinishPageState extends State<FinishPage> {
+  int _trophyIndex = 100;
+
   @override
   Widget build(BuildContext context) {
+    _trophyIndex = ModalRoute.of(context)?.settings.arguments != null
+        ? ModalRoute.of(context)?.settings.arguments as int
+        : 100;
+
     return Scaffold(
-      appBar: secondaryAppBar(context, 'About LIFE'),
+      appBar: secondaryAppBar(context, 'Lesson Complete'),
       body: Center(
           child: Padding(
               padding: const EdgeInsets.all(10),
@@ -20,7 +26,11 @@ class FinishPageState extends State<FinishPage> {
                 children: [
                   const Text('Congratulations!'),
                   const Text('You discoverd a __ award'),
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 20),
+                  Text(_trophyIndex == 100
+                      ? 'No Trophy to display'
+                      : 'Your trophy is $_trophyIndex'),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       TextButton(
