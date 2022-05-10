@@ -22,7 +22,7 @@ AppBar secondaryAppBar(context, title) {
       title,
       style: const TextStyle(color: Colors.black),
     ),
-    toolbarHeight: 80,
+    toolbarHeight: 60,
     elevation: 0,
     systemOverlayStyle: const SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.dark,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/components/tita_text_bar.dart';
+import 'package:passage_flutter/theme/app_colors.dart';
+import 'package:passage_flutter/theme/components/outlined_button.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -20,62 +22,191 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text('Home Page'),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
-          child: Column(children: [
-            const Text('Dive Back in'),
-            TextButton(onPressed: () {}, child: const Text('Lesson 1')),
-          ]),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Row(
-            children: [
-              const Text('Statistics:'),
-              const SizedBox(width: 20),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/lifetimeWater');
-                  },
-                  child: const Text('Water Usage')),
-              const SizedBox(width: 20),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/trophyRoom');
-                  },
-                  child: const Text('Trophy Room')),
-            ],
-          ),
-        ),
-        Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-            child: Wrap(
+    return Padding(
+        padding:
+            const EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 12),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/teacherResources');
-                    },
-                    child: const Text('Teacher Resources')),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/filterResources');
-                    },
-                    child: const Text('Filter Resources')),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/aboutResources');
-                    },
-                    child: const Text('About L.I.F.E. / More Resources')),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text('Home',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 20)),
+                      SizedBox(height: 4),
+                      Text('All your modules')
+                    ]),
+                TitaTextBar(
+                    height: 40,
+                    length: 300,
+                    happyBool: true,
+                    text: 'Here:\'s a tip: fuck you')
               ],
-            )),
-      ],
-    );
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: Row(
+                children: [
+                  SizedBox(
+                      width: 290,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const AppColors().lightBlue,
+                                width: 3,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20))),
+                          padding: const EdgeInsets.all(10),
+                          child: Center(
+                              child: Column(children: [
+                            const Text('Dive back in'),
+                            const SizedBox(height: 20),
+                            Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const AppColors().shadowColor,
+                                      offset: const Offset(6, 6),
+                                      blurRadius: 12,
+                                      spreadRadius: 3,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                ),
+                                height: 100,
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed('/teacherResources');
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                const AppColors().buttonBlue),
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ))),
+                                    child: const Center(
+                                        child: Text(
+                                      'Lesson 1',
+                                      style: TextStyle(color: Colors.white),
+                                    )))),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: const AppColors().lightBlue,
+                                    width: 3,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20))),
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              height: 20,
+                              child: ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                child: LinearProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                  color: const AppColors().buttonBlue,
+                                  value: 0.7,
+                                ),
+                              ),
+                            ),
+                            // const SizedBox(height: 10),
+                            const Text('35%')
+                          ])))),
+                  const SizedBox(width: 20),
+                  SizedBox(
+                      width: 290,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const AppColors().lightBlue,
+                                width: 3,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20))),
+                          padding: const EdgeInsets.all(10),
+                          child: Center(
+                              child: Column(children: const [
+                            Text('Congrats'),
+                            SizedBox(height: 10),
+                            Icon(
+                              Icons.lightbulb,
+                              size: 100,
+                            ),
+                            SizedBox(height: 10),
+                            Text('ABC found a trophy'),
+                            SizedBox(height: 20),
+                          ])))),
+                  const SizedBox(width: 20),
+                  SizedBox(
+                      width: 290,
+                      child: Column(
+                        children: [
+                          const Text('Extras',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w900, fontSize: 24)),
+                          const SizedBox(height: 24),
+                          outlinedButton(
+                            context,
+                            text: 'Meet the Students',
+                            path: '/teacherResources',
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const AppColors().shadowColor,
+                                    offset: const Offset(6, 6),
+                                    blurRadius: 12,
+                                    spreadRadius: 3,
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              height: 100,
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/teacherResources');
+                                  },
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              const AppColors().orange),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ))),
+                                  child: const Center(
+                                      child: Text(
+                                    'Teacher Resources',
+                                    style: TextStyle(color: Colors.white),
+                                  ))))
+                        ],
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }
 
@@ -99,7 +230,8 @@ class MeetTheStudents extends StatelessWidget {
               height: 100,
             ),
             TitaTextBar(
-                length: 1,
+                height: 100,
+                length: 400,
                 happyBool: true,
                 text:
                     'LIFE stands for LATAM Filter for Education and is a university project made by 5 engineering and 4 public health students! ')

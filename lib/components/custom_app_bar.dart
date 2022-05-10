@@ -7,7 +7,7 @@ AppBar customAppBar(context, String title) {
   return AppBar(
     leadingWidth: 200, //obsolete now..
     leading: Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(10),
       child: TextButton(
           child: Row(children: const [
             Icon(Icons.water_drop),
@@ -29,7 +29,7 @@ AppBar customAppBar(context, String title) {
         iconSize: 50,
         color: AppTheme.colors.darkBlue,
         onPressed: () {
-          Navigator.pushNamed(context, '/profile');
+          Navigator.pushNamed(context, '/settingsPage');
         },
         tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
       ),
@@ -42,7 +42,7 @@ AppBar customAppBar(context, String title) {
       title,
       style: const TextStyle(color: Colors.black),
     ),
-    toolbarHeight: 80,
+    toolbarHeight: 60,
     elevation: 0,
     systemOverlayStyle: const SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.dark,

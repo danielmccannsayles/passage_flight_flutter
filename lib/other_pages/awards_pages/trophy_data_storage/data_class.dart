@@ -7,8 +7,10 @@ part 'data_class.g.dart';
 @JsonSerializable()
 class DataClass {
   List<int> trophies;
+  //set mostRecent to 100 when no trophies have been found
+  int mostRecent;
 
-  DataClass({required this.trophies});
+  DataClass({required this.trophies, required this.mostRecent});
 
   //use this to get one property
   int get(int index) {

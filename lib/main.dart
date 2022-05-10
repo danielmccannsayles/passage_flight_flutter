@@ -13,7 +13,11 @@ import 'package:passage_flutter/other_pages/guided_lesson_pages/guided_lessons/s
 import 'package:passage_flutter/other_pages/resource_pages/about_resources.dart';
 import 'package:passage_flutter/other_pages/resource_pages/admin_page.dart';
 import 'package:passage_flutter/other_pages/resource_pages/filter_resources.dart';
+import 'package:passage_flutter/other_pages/resource_pages/check_page.dart';
 import 'package:passage_flutter/other_pages/resource_pages/teacher_resources.dart';
+import 'package:passage_flutter/other_pages/settings_page.dart';
+import 'package:passage_flutter/other_pages/test_filter.dart';
+import 'package:passage_flutter/theme/app_colors.dart';
 
 import 'package:passage_flutter/theme/app_theme.dart';
 import '/components/custom_app_bar.dart';
@@ -70,12 +74,15 @@ class _MyAppState extends State<MyApp> {
               child: const MainNavigation(),
             ),
         //lessons page has active state which is the progress.
-        '/scienceLessonOne': (context) => ChangeNotifierProvider(
-              create: (context) => LearningProgressStore(),
-              child: const ScienceLesson(),
-            ),
+        '/scienceLessonOne': (context) => MultiProvider(providers: [
+              ChangeNotifierProvider(
+                  create: (context) => TrophyProgressStore()),
+              ChangeNotifierProvider(
+                  create: (context) => LearningProgressStore()),
+            ], child: const ScienceLesson()),
         //Resource Pages
         '/teacherResources': (context) => const TeacherResources(),
+        '/checkPage': (context) => const CheckPage(),
         '/filterResources': (context) => const FilterResources(),
         '/aboutResources': (context) => const AboutResources(),
         //Awards Pages
@@ -93,6 +100,8 @@ class _MyAppState extends State<MyApp> {
                   create: (context) => TrophyProgressStore()),
               ChangeNotifierProvider(create: (context) => WaterStore()),
             ], child: const AdminPage()),
+        '/settingsPage': (context) => SettingsPage(changeLocale: setLocale),
+        '/testFilter': (context) => const TestFilter(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -156,14 +165,18 @@ class _MainNavigationState extends State<MainNavigation> {
     return Scaffold(
         appBar: customAppBar(context, 'LIFE'),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.only(left: 250, right: 250, bottom: 30),
+          padding: const EdgeInsets.only(left: 250, right: 250, bottom: 20),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              border: Border.all(color: AppTheme.colors.buttonBlue, width: 2),
-              boxShadow: const [
+              border: Border.all(color: AppTheme.colors.lightBlue, width: 3),
+              boxShadow: [
                 BoxShadow(
-                    color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+                  color: const AppColors().shadowColor,
+                  offset: const Offset(6, 6),
+                  blurRadius: 12,
+                  spreadRadius: 3,
+                )
               ],
             ),
             child: ClipRRect(

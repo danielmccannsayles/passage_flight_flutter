@@ -9,8 +9,10 @@ part of 'data_class.dart';
 DataClass _$DataClassFromJson(Map<String, dynamic> json) => DataClass(
       trophies:
           (json['trophies'] as List<dynamic>).map((e) => e as int).toList(),
+      mostRecent: json['mostRecent'] as int,
     );
 
 Map<String, dynamic> _$DataClassToJson(DataClass instance) => <String, dynamic>{
       'trophies': instance.trophies,
+      'mostRecent': instance.mostRecent,
     };

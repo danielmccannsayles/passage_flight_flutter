@@ -72,7 +72,14 @@ class _QuizComponentState extends State<QuizComponent> {
 
     //check if last quiz
     if (widget.finalQuiz) {
+      //create trophy
       int _trophyIndex = generateTrophy();
+      //add trophy
+      Provider.of<TrophyProgressStore>(context, listen: false)
+          .addTrophy(_trophyIndex);
+      //set it as most recent
+      Provider.of<TrophyProgressStore>(context, listen: false)
+          .changeMostRecent(_trophyIndex);
       _quizFinished = 0;
       widget.clearProgress;
       _selectedAnswers = List.filled(_selectedAnswers.length, 0);

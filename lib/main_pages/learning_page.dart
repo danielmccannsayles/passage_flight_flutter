@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:passage_flutter/main_pages/learning_page_components/classes.dart';
+import 'package:passage_flutter/other_pages/pdf_view_page.dart';
+import 'package:passage_flutter/theme/app_colors.dart';
 import 'package:passage_flutter/theme/app_theme.dart';
 
 import 'package:pdfx/pdfx.dart';
-import 'dart:developer';
 
 class LearningPage extends StatefulWidget {
   const LearningPage({Key? key}) : super(key: key);
 
   @override
   State<LearningPage> createState() => LearningPageState();
-}
-
-class PdfFile {
-  String filePath;
-  String title;
-  String blurb;
-  late final document = PdfDocument.openAsset(filePath);
-
-  PdfFile(this.filePath, this.title, this.blurb);
-}
-
-class AdventureObject {
-  String title;
-  String blurb;
-  String filePath;
-
-  AdventureObject(this.title, this.blurb, this.filePath);
 }
 
 //global controller. Reassign controller when things change.
@@ -38,102 +23,204 @@ createController(document) {
 }
 
 class LearningPageState extends State<LearningPage> {
-  final _lessonsList = <PdfFile>[
-    PdfFile('assets/lessonPdfs/learning1.pdf', 'Lesson 1 (Short)',
-        'This lesson covers the filter'),
-    PdfFile('assets/lessonPdfs/lesson2.pdf', 'Lesson 2 (Full length)',
-        'This lesson covers water'),
-    PdfFile('assets/lessonPdfs/lesson3.pdf', 'Lesson 3 (Full length)',
-        'This lesson covers gravity and physics'),
+  //complete list - change order manually. Filtered automatically.
+  final _completeList = [
+    PdfFile('assets/lessonPdfs/learning1.pdf', 'Lesson 1 (S)',
+        'This lesson covers the filter', const AppColors().buttonBlue),
+    PdfFile('assets/lessonPdfs/lesson2.pdf', 'Lesson 2 (L)',
+        'This lesson covers water', const AppColors().buttonBlue),
+    PdfFile('assets/lessonPdfs/lesson3.pdf', 'Lesson 3 (L)',
+        'This lesson covers gravity and physics', const AppColors().buttonBlue),
+    AdventureObject(
+        'Science 1', 'This is science one', '/scienceLessonOne', Colors.green)
   ];
 
-  final _adventuresList = <AdventureObject>[
-    AdventureObject('Science 1', 'This is science one', '/scienceLessonOne')
-  ];
+  String _dropDownValue = 'All';
+
+  List _filterList() {
+    List _list = [];
+    //copy over complete list
+    _list.addAll(_completeList);
+    //if _dropDown value isn't all, then sort the list
+    if (_dropDownValue == 'Learning Adventures') {
+      _list.retainWhere((element) => element is AdventureObject);
+    } else if (_dropDownValue == 'Lesson Modules') {
+      _list.retainWhere((element) => element is PdfFile);
+    }
+    return _list;
+  }
+
+  Container _buildLesson(PdfFile fileObject) {
+    return Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: const AppColors().shadowColor,
+              offset: const Offset(6, 6),
+              blurRadius: 12,
+              spreadRadius: 3,
+            )
+          ],
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+        ),
+        width: 290,
+        height: 120,
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //willpopscope is used cause popping this page crashes the app - something to fix
+              return WillPopScope(
+                  onWillPop: () async => false,
+                  //TODO: test out this new pdf page:)
+                  child: PdfViewPage(
+                    controller: PdfController(document: fileObject.document),
+                    fileObject: fileObject,
+                  )
+                  // child: Scaffold(
+                  //     appBar: pdfBar(
+                  //       context,
+                  //       fileObject.title,
+                  //     ),
+                  //     body: Column(children: [
+                  //       Text(fileObject.title),
+                  //       Row(children: [
+                  //         TextButton(
+                  //             onPressed: () {},
+                  //             child: Column(children: const [
+                  //               Icon(Icons.chevron_left),
+                  //               Text('Back')
+                  //             ])),
+                  //         PdfView(
+                  //             controller: PdfController(
+                  //                 document: fileObject.document)),
+                  //         TextButton(
+                  //             onPressed: () {},
+                  //             child: Column(children: const [
+                  //               Icon(Icons.chevron_right),
+                  //               Text('Forwards')
+                  //             ])),
+                  //       ]),
+                  //     ]))
+                  );
+            }));
+          },
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(fileObject.color),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ))),
+          child: ListTile(
+            title: Text(
+              fileObject.title,
+              style: const TextStyle(fontSize: 24, color: Colors.white),
+            ),
+            subtitle: Text(fileObject.blurb,
+                style: const TextStyle(color: Colors.white)),
+          ),
+        ));
+  }
+
+  Container _buildAdventure(AdventureObject adventureObject) {
+    return Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: const AppColors().shadowColor,
+              offset: const Offset(6, 6),
+              blurRadius: 12,
+              spreadRadius: 3,
+            )
+          ],
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+        ),
+        width: 290,
+        height: 120,
+        child: TextButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(adventureObject.filePath);
+          },
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(adventureObject.color),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ))),
+          child: ListTile(
+            title: Text(
+              adventureObject.title,
+              style: const TextStyle(fontSize: 24, color: Colors.white),
+            ),
+            subtitle: Text(
+              adventureObject.blurb,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
         child: Padding(
-            padding: const EdgeInsets.all(50),
-            child: Column(children: [
-              Row(
-                children: const [
-                  Text('Lessons'),
-                  SizedBox(width: 500),
-                  Text('Adventures')
-                ],
+            padding: const EdgeInsets.all(20),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text("Yo welcome to lessons"),
+              const SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const AppColors().lightBlue,
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: DropdownButton<String>(
+                  value: _dropDownValue,
+                  icon: Icon(
+                    Icons.expand_more,
+                    color: const AppColors().buttonBlue,
+                  ),
+                  underline: const SizedBox(),
+                  elevation: 0,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w900, color: Colors.black),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _dropDownValue = newValue!;
+                    });
+                  },
+                  items: <String>[
+                    'All',
+                    'Learning Adventures',
+                    'Lesson Modules'
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ),
+              const SizedBox(height: 20),
               Expanded(
-                child: Row(children: [
-                  Expanded(
-                    child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: _lessonsList.length,
-                        // The list items
-                        itemBuilder: (context, index) {
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            color: AppTheme.colors.orange,
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  //willpopscope is used cause popping this page crashes the app - something to fix
-                                  return WillPopScope(
-                                      onWillPop: () async => false,
-                                      child: Scaffold(
-                                          appBar: pdfBar(
-                                            context,
-                                            _lessonsList[index].title,
-                                          ),
-                                          body: PdfView(
-                                              controller: PdfController(
-                                                  document: _lessonsList[index]
-                                                      .document))));
-                                }));
-                              },
-                              title: Text(
-                                _lessonsList[index].title,
-                                style: const TextStyle(fontSize: 24),
-                              ),
-                              subtitle: Text(
-                                _lessonsList[index].blurb,
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: _adventuresList.length,
-                        // The list items
-                        itemBuilder: (context, index) {
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            color: AppTheme.colors.orange,
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, _adventuresList[index].filePath);
-                              },
-                              title: Text(
-                                _adventuresList[index].title,
-                                style: const TextStyle(fontSize: 24),
-                              ),
-                              subtitle: Text(
-                                _adventuresList[index].blurb,
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
-                ]),
-              )
+                  child: Wrap(
+                spacing: 20,
+                runSpacing: 20,
+                children: _filterList()
+                    .map((object) => object is AdventureObject
+                        ? _buildAdventure(object)
+                        : (object is PdfFile)
+                            ? _buildLesson(object)
+                            : const SizedBox())
+                    .toList(),
+              ))
             ])));
   }
 }
@@ -145,7 +232,6 @@ AppBar pdfBar(context, String title) {
       iconSize: 40,
       color: AppTheme.colors.darkBlue,
       onPressed: () {
-        log('test');
         pdfController.dispose();
         //if pop until is used then it tries to pop the pdf page which is a poroblem.
         //I think it's cause it disposes of the pdf viewer
@@ -155,8 +241,6 @@ AppBar pdfBar(context, String title) {
       tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
     ),
     centerTitle: true,
-    // Here we take the value from the MyHomePage object that was created by
-    // the App.build method, and use it to set our appbar title.
     backgroundColor: AppTheme.colors.lightBlue,
     title: Text(
       title,

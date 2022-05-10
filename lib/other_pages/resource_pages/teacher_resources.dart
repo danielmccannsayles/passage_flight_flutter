@@ -1,106 +1,168 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/components/secondary_app_bar.dart';
-import 'package:passage_flutter/theme/app_theme.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'package:passage_flutter/components/tita_text_bar.dart';
+import 'package:passage_flutter/theme/app_colors.dart';
+import 'package:passage_flutter/theme/components/outlined_button.dart';
 
 class TeacherResources extends StatefulWidget {
   const TeacherResources({Key? key}) : super(key: key);
 
   @override
-  State<TeacherResources> createState() => TeacherResourcesState();
+  State<TeacherResources> createState() => TeacherState();
 }
 
-class TeacherResourcesState extends State<TeacherResources> {
-  String _text = '';
-  final TextEditingController _controller = TextEditingController(text: "");
-  bool _wrong = false;
-  bool _submitting = false;
+class TeacherState extends State<TeacherResources> {
+  final double _height = 150;
+
+  final double _width = 200;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: secondaryAppBar(context, 'Teacher Resources'),
-      body: Center(
+        appBar: secondaryAppBar(context, 'Teacher Resources'),
+        body: Center(
           child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Teacher Resources'),
-                  const Text('This will be the teacher resources'),
-                  Text(_text),
-                  Row(
-                    children: [
-                      const SizedBox(width: 300),
-                      PinCodeTextField(
-                        autofocus: true,
-                        controller: _controller,
-                        hideCharacter: true,
-                        highlight: true,
-                        highlightColor: Colors.blue,
-                        defaultBorderColor: Colors.black,
-                        hasTextBorderColor: Colors.green,
-                        maxLength: 4,
-                        maskCharacter: "*",
-                        onTextChanged: (text) {
-                          setState(() {
-                            _text = text;
-                          });
-                        },
-                        onDone: (text) {
-                          setState(() {
-                            _submitting = true;
-                          });
-                          sleep(const Duration(milliseconds: 700));
-                          setState(() {
-                            _submitting = false;
-                          });
-                          if (text == "1234") {
-                            log("Correct");
-                            _controller.text = '';
-                            Navigator.pushNamed(context, '/adminPage');
-                          } else {
-                            _controller.text = '';
-                            _wrong = true;
-                          }
-                        },
-                        pinBoxWidth: 50,
-                        pinBoxHeight: 64,
-                        hasUnderline: true,
-                        wrapAlignment: WrapAlignment.spaceAround,
-                        pinBoxDecoration:
-                            ProvidedPinBoxDecoration.defaultPinBoxDecoration,
-                        pinTextStyle: const TextStyle(fontSize: 22.0),
-                        pinTextAnimatedSwitcherTransition:
-                            ProvidedPinBoxTextAnimation.scalingTransition,
-//                    pinBoxColor: Colors.green[100],
-                        pinTextAnimatedSwitcherDuration:
-                            const Duration(milliseconds: 300),
-//                    highlightAnimation: true,
-                        highlightAnimationBeginColor: Colors.black,
-                        highlightAnimationEndColor: Colors.white12,
-                        keyboardType: TextInputType.number,
-                      ),
-                      _submitting
-                          ? FittedBox(
-                              child: Container(
-                                  margin: const EdgeInsets.all(16.0),
-                                  child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          AppTheme.colors.darkBlue))))
-                          : Container(/* Dummy */),
-                    ],
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text('Teacher Resources',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 20)),
+                        SizedBox(height: 4),
+                        Text('Teacher Guides, experiment worksheets, and more')
+                      ]),
+                  const SizedBox(
+                    height: 20,
                   ),
-                  _wrong
-                      ? const Text(
-                          "Wrong password, try again",
-                          style: TextStyle(color: Colors.red),
-                        )
-                      : const Text(""),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            const Text('Help',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900, fontSize: 20)),
+                            const SizedBox(height: 32),
+                            outlinedButton(context,
+                                text: 'Teacher Guide (tbd)',
+                                path: '/',
+                                blue: false),
+                            const SizedBox(height: 20),
+                            outlinedButton(context,
+                                text: 'Admin Page',
+                                path: '/checkPage',
+                                blue: false)
+                          ],
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          children: [
+                            const Text('Filter',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900, fontSize: 20)),
+                            const SizedBox(height: 32),
+                            outlinedButton(context,
+                                text: 'Refill Filters (tbd)',
+                                path: '/',
+                                blue: false),
+                            const SizedBox(height: 20),
+                            outlinedButton(context,
+                                text: 'FAQ (tbd)', path: '/', blue: false)
+                          ],
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          children: [
+                            const Text('Instructions',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900, fontSize: 20)),
+                            const SizedBox(height: 32),
+                            Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const AppColors().shadowColor,
+                                      offset: const Offset(6, 6),
+                                      blurRadius: 12,
+                                      spreadRadius: 3,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                ),
+                                width: 290,
+                                height: 120,
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed('/');
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                const AppColors().orange),
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ))),
+                                    child: const Center(
+                                        child: Text(
+                                      'Teacher Guides (tbd)',
+                                      style: TextStyle(color: Colors.white),
+                                    )))),
+                            const SizedBox(height: 20),
+                            Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const AppColors().shadowColor,
+                                      offset: const Offset(6, 6),
+                                      blurRadius: 12,
+                                      spreadRadius: 3,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                ),
+                                width: 290,
+                                height: 120,
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed('/');
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                const AppColors().orange),
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ))),
+                                    child: const Center(
+                                        child: Text(
+                                      'Extra Resources (tbd)',
+                                      style: TextStyle(color: Colors.white),
+                                    ))))
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
-              ))),
-    );
+              )),
+        ));
   }
 }
