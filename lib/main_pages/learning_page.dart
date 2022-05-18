@@ -32,7 +32,10 @@ class LearningPageState extends State<LearningPage> {
     PdfFile('assets/lessonPdfs/lesson3.pdf', 'Lesson 3 (L)',
         'This lesson covers gravity and physics', const AppColors().buttonBlue),
     AdventureObject(
-        'Science 1', 'This is science one', '/scienceLessonOne', Colors.green)
+        'Filter Learning Adventure 1',
+        'Self-guided lesson, learn about the filter',
+        '/scienceLessonOne',
+        Colors.green)
   ];
 
   String _dropDownValue = 'All';
@@ -72,7 +75,6 @@ class LearningPageState extends State<LearningPage> {
               //willpopscope is used cause popping this page crashes the app - something to fix
               return WillPopScope(
                   onWillPop: () async => false,
-                  //TODO: test out this new pdf page:)
                   child: PdfViewPage(
                     controller: PdfController(document: fileObject.document),
                     fileObject: fileObject,
@@ -167,10 +169,14 @@ class LearningPageState extends State<LearningPage> {
   Widget build(BuildContext context) {
     return Center(
         child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text("Yo welcome to lessons"),
+              const Text('Learning',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20)),
+              const SizedBox(height: 4),
+              const Text('Choose a topic to learn'),
               const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
@@ -210,17 +216,20 @@ class LearningPageState extends State<LearningPage> {
               ),
               const SizedBox(height: 20),
               Expanded(
-                  child: Wrap(
-                spacing: 20,
-                runSpacing: 20,
-                children: _filterList()
-                    .map((object) => object is AdventureObject
-                        ? _buildAdventure(object)
-                        : (object is PdfFile)
-                            ? _buildLesson(object)
-                            : const SizedBox())
-                    .toList(),
-              ))
+                  child: SizedBox(
+                      width: 910,
+                      child: SingleChildScrollView(
+                          child: Wrap(
+                        spacing: 20,
+                        runSpacing: 20,
+                        children: _filterList()
+                            .map((object) => object is AdventureObject
+                                ? _buildAdventure(object)
+                                : (object is PdfFile)
+                                    ? _buildLesson(object)
+                                    : const SizedBox())
+                            .toList(),
+                      ))))
             ])));
   }
 }

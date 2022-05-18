@@ -1,5 +1,7 @@
 //material UI, components & custom theme - standard for every file
 import 'package:flutter/material.dart';
+import 'package:passage_flutter/theme/app_colors.dart';
+import 'package:passage_flutter/theme/components/outlined_button.dart';
 import '../components/custom_app_bar.dart';
 import '../filter_components/background_collecting_task.dart';
 
@@ -222,138 +224,257 @@ class _FiltersHomeState extends State<FiltersHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text('Filter Page'),
-            ),
-            const Text('Device Status: '),
-            Text(_connected ? 'Connected' : 'Disconnected',
-                style: _connected
-                    ? const TextStyle(color: Colors.green)
-                    : const TextStyle(color: Colors.red)),
-            Wrap(children: [
-              SizedBox(
-                //TODO: change this width
-                width: 600,
-                child: Column(children: [
-                  Row(
-                    children: [
-                      const Text('Pair A Device: '),
-                      ElevatedButton(
-                        onPressed: () {
-                          FlutterBluetoothSerial.instance.openSettings();
-                        },
-                        child: const Text('Bluetooth settings'),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                AppTheme.colors.buttonBlue)),
-                      ),
-                      const SizedBox(width: 10),
-                      const Text('Paired Devices: '),
-                      DropdownButton(
-                        items: _getDeviceItems(),
-                        onChanged: (value) =>
-                            setState(() => _device = value as BluetoothDevice?),
-                        value: _devicesList.isNotEmpty ? _device : null,
-                      ),
-                      ElevatedButton(
-                        onPressed: _isButtonUnavailable
-                            ? null
-                            : _connected
-                                ? _disconnect
-                                : _connect,
-                        child: Text(_connected ? 'Disconnect' : 'Connect',
-                            style: const TextStyle(
-                              color: Colors.white,
-                            )),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                AppTheme.colors.buttonBlue)),
-                      ),
-                      (_connecting
-                          ? FittedBox(
-                              child: Container(
-                                  margin: const EdgeInsets.all(16.0),
-                                  child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          AppTheme.colors.darkBlue))))
-                          : Container(/* Dummy */)),
-                    ],
-                  )
-                ]),
-              ),
-            ]),
-            Row(
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.only(top: 15, right: 20, left: 20),
+            child: Row(
               children: [
-                const Text('Statistics:'),
-                const SizedBox(
-                  width: 100,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text('Filter',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w900, fontSize: 20)),
+                    const SizedBox(height: 4),
+                    const Text('Hands on experimentation'),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const SizedBox(
+                      width: 290,
+                      child: Text('Guides',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 20)),
+                    ),
+                    const SizedBox(height: 25),
+                    outlinedButton(
+                      context,
+                      text: 'First Time',
+                      path: '/',
+                      height: 105,
+                    ),
+                    const SizedBox(height: 20),
+                    outlinedButton(
+                      context,
+                      text: 'Refilling/Maintanence',
+                      path: '/',
+                      height: 105,
+                    )
+                  ],
                 ),
-              ],
-            ),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: (_connected && _collectingTask?.samples != null)
-                      ? () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ScopedModel<BackgroundCollectingTask>(
-                                  model: _collectingTask!,
-                                  child: const BackgroundCollectedPage(),
-                                );
-                              },
-                            ),
-                          );
-                        }
-                      : null,
-                  child: const Text(
-                    'Go to Data Page',
-                  ),
+                const SizedBox(
+                  width: 20,
                 ),
                 Column(
                   children: [
+                    Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: const AppColors().shadowColor,
+                              offset: const Offset(6, 6),
+                              blurRadius: 12,
+                              spreadRadius: 3,
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        width: 600,
+                        height: 110,
+                        child: TextButton(
+                            onPressed:
+                                (_connected && _collectingTask?.samples != null)
+                                    ? () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return ScopedModel<
+                                                  BackgroundCollectingTask>(
+                                                model: _collectingTask!,
+                                                child:
+                                                    const BackgroundCollectedPage(),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }
+                                    : null,
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        const AppColors().buttonBlue),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ))),
+                            child: const Center(
+                                child: Text(
+                              'Run Filter/ Open data Page',
+                              style: TextStyle(color: Colors.white),
+                            )))),
+                    const SizedBox(height: 20),
                     SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/manualsHome');
-                          },
-                          child: const Text(
-                            'Initial Set Up',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  AppTheme.colors.buttonBlue)),
-                        )),
-                    SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/manualsHome');
-                          },
-                          child: const Text(
-                            'Refilling the Filter Tutorials',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  AppTheme.colors.buttonBlue)),
-                        )),
+                      width: 600,
+                      height: 230,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const AppColors().lightBlue,
+                                width: 3,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20))),
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(children: [
+                              const Text('Connect Filter',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 20)),
+                              const SizedBox(height: 10),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text('Device Status'),
+                                    Text(
+                                        _connected
+                                            ? 'Connected'
+                                            : 'Disconnected',
+                                        style: _connected
+                                            ? const TextStyle(
+                                                color: Colors.green)
+                                            : const TextStyle(
+                                                color: Colors.red)),
+                                  ]),
+                              const SizedBox(height: 10),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text('Selected Device'),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: const AppColors().lightBlue,
+                                          width: 3,
+                                        ),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: DropdownButton(
+                                        icon: Icon(
+                                          Icons.expand_more,
+                                          color: const AppColors().buttonBlue,
+                                        ),
+                                        underline: const SizedBox(),
+                                        elevation: 0,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w900,
+                                            color: Colors.black),
+                                        items: _getDeviceItems(),
+                                        onChanged: (value) => setState(() =>
+                                            _device =
+                                                value as BluetoothDevice?),
+                                        value: _devicesList.isNotEmpty
+                                            ? _device
+                                            : null,
+                                      ),
+                                    ),
+                                  ]),
+                              const SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('*Teacher supervision advised'),
+                                  (_connecting
+                                      ? FittedBox(
+                                          child: Container(
+                                              margin:
+                                                  const EdgeInsets.all(16.0),
+                                              child: CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                              Color>(
+                                                          AppTheme.colors
+                                                              .darkBlue))))
+                                      : const SizedBox(
+                                          height: 16,
+                                          width: 16,
+                                        )),
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                const AppColors().shadowColor,
+                                            offset: const Offset(6, 6),
+                                            blurRadius: 12,
+                                            spreadRadius: 3,
+                                          )
+                                        ],
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.white,
+                                      ),
+                                      width: 100,
+                                      height: 40,
+                                      child: TextButton(
+                                        onPressed: _isButtonUnavailable
+                                            ? null
+                                            : _connected
+                                                ? _disconnect
+                                                : _connect,
+                                        child: Text(
+                                          _connected ? 'Disconnect' : 'Connect',
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                        Color>(
+                                                    const AppColors()
+                                                        .buttonBlue),
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ))),
+                                      )),
+                                ],
+                              )
+                            ]),
+                          )),
+                    ),
                   ],
                 )
               ],
-            ),
-          ],
-        ),
-      ),
-    );
+            )));
   }
 }
+
+
+
+
+//open bluetooth settings
+// ElevatedButton(
+//                         onPressed: () {
+//                           FlutterBluetoothSerial.instance.openSettings();
+//                         },
+//                         child: const Text('Bluetooth settings'),
+//                         style: ButtonStyle(
+//                             backgroundColor: MaterialStateProperty.all<Color>(
+//                                 AppTheme.colors.buttonBlue)),
+//                       ),
+
+
+

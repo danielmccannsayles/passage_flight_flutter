@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/other_pages/awards_pages/trophy_data_storage/trophy_progress_model.dart';
+import 'package:passage_flutter/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../../data_storage/learning_progress_model.dart';
 import 'dart:developer';
@@ -18,22 +19,22 @@ class QuizComponent extends StatefulWidget {
   final int numQuizzes;
   final bool finalQuiz;
   final Function clearProgress;
+  final String quizName;
 
   //index starts at 0!!!
   final int index;
   final String lessonName;
-  final double height;
 
   const QuizComponent(
       {Key? key,
       required this.clearProgress,
+      required this.quizName,
       required this.finalQuiz,
       required this.questions,
       required this.allAnswers,
       required this.correctAnswers,
       required this.numQuizzes,
       required this.index,
-      required this.height,
       required this.lessonName})
       : super(key: key);
 
@@ -55,7 +56,7 @@ class _QuizComponentState extends State<QuizComponent> {
   late List<int> _selectedAnswers;
   late List<String> _selectedStringAnswers;
 
-  int _quizFinished = 0;
+  bool _quizFinished = false;
 
   void submit() {
     log('submitting..');
@@ -66,7 +67,7 @@ class _QuizComponentState extends State<QuizComponent> {
     }
     //We got to the end so all answers were correct
     setState(() {
-      _quizFinished = 1;
+      _quizFinished = true;
     });
     log('submitted successfully');
 
@@ -80,13 +81,16 @@ class _QuizComponentState extends State<QuizComponent> {
       //set it as most recent
       Provider.of<TrophyProgressStore>(context, listen: false)
           .changeMostRecent(_trophyIndex);
-      _quizFinished = 0;
+      _quizFinished = false;
       widget.clearProgress;
       _selectedAnswers = List.filled(_selectedAnswers.length, 0);
       Navigator.pushNamed(context, '/finishPage', arguments: _trophyIndex);
     } else {
       Provider.of<LearningProgressStore>(context, listen: false)
           .changeProgress(widget.lessonName, widget.index, 1);
+      log(Provider.of<LearningProgressStore>(context, listen: false)
+          .getProgressData()
+          .toString());
     }
   }
 
@@ -122,10 +126,11 @@ class _QuizComponentState extends State<QuizComponent> {
               }));
         }
         //at the end of each iteration of i add the question as well
-        questions.add(Column(children: [
-          Text(widget.questions[i]),
+        questions.add(
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text((i + 1).toString() + '). ' + widget.questions[i]),
           ...answers,
-          Text(_selectedStringAnswers[i]),
+          const SizedBox(height: 10),
         ]));
       }
     }
@@ -149,6 +154,7 @@ class _QuizComponentState extends State<QuizComponent> {
       //get() is the mapped version. Idk why I'm using it here I forget
       _selectedAnswers = _storage.getProgressData().get(widget.lessonName);
       _progressData = _storage.getProgressData().get(widget.lessonName);
+      _quizFinished = _selectedAnswers[widget.index] == 1;
       log('_progressData changed to: $_progressData');
     });
   }
@@ -156,38 +162,29 @@ class _QuizComponentState extends State<QuizComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        // height: widget.height,
+        margin: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.red,
+              color: const AppColors().buttonBlue,
             ),
             borderRadius: BorderRadius.circular(20)),
         child: Column(
           children: [
-            Text('Quiz:' + widget.index.toString()),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: _createQuestions(),
-              ),
-            ),
-            _quizFinished == 0
-                ? TextButton(
-                    onPressed: submit, child: const Text('Submit Quiz'))
-                : const Text('Finished'),
-            Text('ProgressData: ${_progressData[widget.index]}'),
-            TextButton(
-                onPressed: () {
-                  Provider.of<LearningProgressStore>(context, listen: false)
-                      .changeProgress(widget.lessonName, widget.index, 1);
-                },
-                child: const Text('Correct (1)')),
-            TextButton(
-                onPressed: () {
-                  Provider.of<LearningProgressStore>(context, listen: false)
-                      .changeProgress(widget.lessonName, widget.index, 0);
-                },
-                child: const Text('False (0)')),
+            Text(widget.quizName),
+            Text('Quiz #' + (widget.index + 1).toString()),
+            _quizFinished
+                ? const SizedBox()
+                : Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: _createQuestions(),
+                    ),
+                  ),
+            _quizFinished
+                ? const Text('Finished')
+                : TextButton(
+                    onPressed: submit, child: const Text('Submit Quiz')),
           ],
         ));
   }

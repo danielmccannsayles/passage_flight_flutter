@@ -37,8 +37,8 @@ class _PdfViewPageState extends State<PdfViewPage> {
                 child: Column(
                     children: const [Icon(Icons.chevron_left), Text('Back')])),
             SizedBox(
-                height: 300,
-                width: 500,
+                height: 400,
+                width: 800,
                 child: PdfView(controller: widget.controller)),
             TextButton(
                 onPressed: () {

@@ -49,7 +49,7 @@ class LearningProgressStore extends ChangeNotifier {
 
     //store it in file
     progressStorage.writeProgress(_progressData);
-    log(_progressData.mathOne.toString());
+    log('progress Changed');
     notifyListeners();
   }
 

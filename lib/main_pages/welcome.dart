@@ -20,10 +20,31 @@ class ImageInfo {
 
 class _WelcomePageState extends State<WelcomePage> {
   List<ImageInfo> imagesList = [
-    ImageInfo('Piece 1', 'Sensor', 'This is a sensor and piece #1',
-        'assets/welcomePictures/filter.png'),
-    ImageInfo('Piece 2', 'Motor', 'This is a motor and piece #2',
-        'assets/welcomePictures/zoomedfilter.png'),
+    ImageInfo(
+        'Intelligent Filter',
+        'Intelligent Filter',
+        'Click through to see the different components of the filter!',
+        'assets/welcomePictures/fullview.jpg'),
+    ImageInfo(
+        'Gravel',
+        'Filter Section',
+        'The gravel is used to filter out large particles such as twigs, rocks, or leaves',
+        'assets/welcomePictures/gravel.jpg'),
+    ImageInfo(
+        'Sand',
+        'Filter Section',
+        'The sand is used to filter out small particles such as dirt, algae, or other organic matter',
+        'assets/welcomePictures/sand.jpg'),
+    ImageInfo(
+        'Activated Charcoal',
+        'Filter Section',
+        'The activated charcoal is used to filter out harmful chemicals. It latches onto them and doesn\'t let go!',
+        'assets/welcomePictures/charcoal.jpg'),
+    ImageInfo(
+        'Reservoirs',
+        'Container',
+        'The reservoirs hold excess water since the pump can only pump so much at a time! The right one holds filtered water, while the left one holds unfiltered water',
+        'assets/welcomePictures/reservoirs.jpg'),
   ];
   int currentImage = 0;
   late String currentImageUrl;
@@ -55,10 +76,11 @@ class _WelcomePageState extends State<WelcomePage> {
               outlinedButton(
                 context,
                 text: 'Why a Filter',
-                path: '/testFilter',
+                path: '/teacherResources',
               ),
               const SizedBox(height: 20),
-              outlinedButton(context, text: 'How to Use', path: '/testFilter')
+              outlinedButton(context,
+                  text: 'How to Use', path: '/teacherResources')
             ]),
             const SizedBox(
               width: 20,

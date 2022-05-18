@@ -16,7 +16,6 @@ import 'package:passage_flutter/other_pages/resource_pages/filter_resources.dart
 import 'package:passage_flutter/other_pages/resource_pages/check_page.dart';
 import 'package:passage_flutter/other_pages/resource_pages/teacher_resources.dart';
 import 'package:passage_flutter/other_pages/settings_page.dart';
-import 'package:passage_flutter/other_pages/test_filter.dart';
 import 'package:passage_flutter/theme/app_colors.dart';
 
 import 'package:passage_flutter/theme/app_theme.dart';
@@ -69,8 +68,13 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         //TODO: possibly just put all the providers above everything? Idrk but it seems messy rn
-        '/': (context) => ChangeNotifierProvider(
-              create: (context) => LearningProgressStore(),
+        '/': (context) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                    create: (context) => TrophyProgressStore()),
+                ChangeNotifierProvider(
+                    create: (context) => LearningProgressStore()),
+              ],
               child: const MainNavigation(),
             ),
         //lessons page has active state which is the progress.
@@ -101,7 +105,6 @@ class _MyAppState extends State<MyApp> {
               ChangeNotifierProvider(create: (context) => WaterStore()),
             ], child: const AdminPage()),
         '/settingsPage': (context) => SettingsPage(changeLocale: setLocale),
-        '/testFilter': (context) => const TestFilter(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -114,6 +117,7 @@ class _MyAppState extends State<MyApp> {
         Locale('es', ''), // Spanish, no country code
       ],
       locale: _locale,
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
     );
   }
 }
@@ -210,6 +214,7 @@ class _MainNavigationState extends State<MainNavigation> {
             ),
           ),
         ),
+        extendBody: true,
         body: _pages[_selectedIndex]);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passage_flutter/theme/app_colors.dart';
 
 import 'background_collecting_task.dart';
 import './helpers/LineChart.dart';
@@ -96,7 +97,7 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
           children: <Widget>[
             const Divider(),
             const ListTile(
-                leading: Icon(Icons.brightness_7),
+                leading: Icon(Icons.water_drop),
                 title: Text('TDS Sensor (Water Purity) '),
                 subtitle: Text("Unit: Parts per million")),
             LineChart(
@@ -113,18 +114,21 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
                 null,
                 //const PaintStyle(style: PaintingStyle.stroke, strokeWidth: 1.7*3, color: Colors.indigo, strokeCap: StrokeCap.round),
               ],
-              seriesLinesStyles: const [
+              seriesLinesStyles: [
                 PaintStyle(
                     style: PaintingStyle.stroke,
                     strokeWidth: 1.7,
-                    color: Colors.redAccent),
+                    color: const AppColors().buttonBlue),
               ],
             ),
             const Divider(),
-            const ListTile(
-              leading: Icon(Icons.brightness_7),
-              title: Text('Flowrate Sensor (Measures speed of pump)'),
-              subtitle: Text("Unit: Meters per second"),
+            ListTile(
+              leading: Icon(
+                Icons.water,
+                color: const AppColors().buttonBlue,
+              ),
+              title: const Text('Flowrate Sensor (Measures speed of pump)'),
+              subtitle: const Text("Unit: Meters per second"),
             ),
             LineChart(
               constraints: const BoxConstraints.expand(height: 350),
@@ -140,17 +144,20 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
                 null,
                 //const PaintStyle(style: PaintingStyle.stroke, strokeWidth: 1.7*3, color: Colors.indigo, strokeCap: StrokeCap.round),
               ],
-              seriesLinesStyles: const [
+              seriesLinesStyles: [
                 PaintStyle(
                     style: PaintingStyle.stroke,
                     strokeWidth: 1.7,
-                    color: Colors.indigoAccent),
+                    color: const AppColors().buttonBlue),
               ],
             ),
             const Divider(),
-            const ListTile(
-              leading: Icon(Icons.filter_vintage),
-              title: Text('Reservoir 1'),
+            ListTile(
+              leading: Icon(
+                Icons.call_to_action,
+                color: const AppColors().buttonBlue,
+              ),
+              title: const Text('Reservoir 1'),
             ),
             Text(
                 lastSamples.last.waterHeight1.toInt() == 1
@@ -161,9 +168,12 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
                         ? Colors.green
                         : Colors.red)),
             const Divider(),
-            const ListTile(
-              leading: Icon(Icons.filter_vintage),
-              title: Text('Reservoir 2'),
+            ListTile(
+              leading: Icon(
+                Icons.call_to_action,
+                color: const AppColors().buttonBlue,
+              ),
+              title: const Text('Reservoir 2'),
             ),
             Text(
                 lastSamples.last.waterHeight2.toInt() == 1

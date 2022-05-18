@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/components/tita_text_bar.dart';
+import 'package:passage_flutter/other_pages/awards_pages/trophy_data_storage/trophy_progress_model.dart';
 import 'package:passage_flutter/theme/app_colors.dart';
 import 'package:passage_flutter/theme/components/outlined_button.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -41,20 +43,23 @@ class _HomeState extends State<Home> {
                       Text('All your modules')
                     ]),
                 TitaTextBar(
-                    height: 40,
+                    height: 60,
                     length: 300,
                     happyBool: true,
-                    text: 'Here:\'s a tip: fuck you')
+                    text:
+                        'I\'m tita! I provide you with helpful tips and information ')
               ],
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             Expanded(
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                       width: 290,
+                      height: 286,
                       child: Container(
                           decoration: BoxDecoration(
                               border: Border.all(
@@ -85,7 +90,7 @@ class _HomeState extends State<Home> {
                                 child: TextButton(
                                     onPressed: () {
                                       Navigator.of(context)
-                                          .pushNamed('/teacherResources');
+                                          .pushNamed('/', arguments: 2);
                                     },
                                     style: ButtonStyle(
                                         backgroundColor:
@@ -131,27 +136,42 @@ class _HomeState extends State<Home> {
                   const SizedBox(width: 20),
                   SizedBox(
                       width: 290,
+                      height: 286,
                       child: Container(
                           decoration: BoxDecoration(
                               border: Border.all(
                                 color: const AppColors().lightBlue,
                                 width: 3,
                               ),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20))),
-                          padding: const EdgeInsets.all(10),
-                          child: Center(
-                              child: Column(children: const [
-                            Text('Congrats'),
-                            SizedBox(height: 10),
-                            Icon(
-                              Icons.lightbulb,
-                              size: 100,
-                            ),
-                            SizedBox(height: 10),
-                            Text('ABC found a trophy'),
-                            SizedBox(height: 20),
-                          ])))),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Material(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                              child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/trophyRoom');
+                                  },
+                                  customBorder: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Center(
+                                      child: Column(children: [
+                                    const Text('Congrats'),
+                                    const SizedBox(height: 10),
+                                    const Icon(
+                                      Icons.lightbulb,
+                                      size: 100,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Consumer<TrophyProgressStore>(
+                                      builder: (context, store, child) {
+                                        return Text(
+                                            "ABC found trophy ${store.getTrophyData().mostRecent}");
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                  ])))))),
                   const SizedBox(width: 20),
                   SizedBox(
                       width: 290,
@@ -165,6 +185,7 @@ class _HomeState extends State<Home> {
                             context,
                             text: 'Meet the Students',
                             path: '/teacherResources',
+                            height: 105,
                           ),
                           const SizedBox(height: 20),
                           Container(
@@ -180,7 +201,7 @@ class _HomeState extends State<Home> {
                                 borderRadius: BorderRadius.circular(20),
                                 color: Colors.white,
                               ),
-                              height: 100,
+                              height: 105,
                               child: TextButton(
                                   onPressed: () {
                                     Navigator.of(context)
