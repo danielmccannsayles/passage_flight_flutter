@@ -52,16 +52,17 @@ class CheckPageState extends State<CheckPage> {
                           setState(() {
                             _submitting = true;
                           });
+                          //TODO uncomment sleep in production .. currently commented since sleep command not available when testing on web-javascript
                           // sleep(const Duration(milliseconds: 700));
                           setState(() {
                             _submitting = false;
                           });
                           if (text == "1234") {
                             log("Correct");
-                            _controller.text = '';
+                            _controller.clear();
                             Navigator.pushNamed(context, '/adminPage');
                           } else {
-                            _controller.text = '';
+                            _controller.clear();
                             _wrong = true;
                           }
                         },

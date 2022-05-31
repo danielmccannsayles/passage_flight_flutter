@@ -38,7 +38,10 @@ class TrophyProgressStorage {
       // Most likely error is that this is being run for the first time.
       //return the default value in this case
 
-      return DataClass(trophies: List.filled(50, 100), mostRecent: 100);
+      return DataClass(
+          trophies: List.filled(50, 0),
+          mostRecent: 100,
+          initials: List.filled(50, 'AA'));
     }
   }
 

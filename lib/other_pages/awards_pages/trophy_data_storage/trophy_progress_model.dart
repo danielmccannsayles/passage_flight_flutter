@@ -5,8 +5,10 @@ import 'trophy_progress_storage.dart';
 import 'dart:developer';
 
 class TrophyProgressStore extends ChangeNotifier {
-  DataClass _trophyData =
-      DataClass(trophies: List.filled(50, 0), mostRecent: 100);
+  DataClass _trophyData = DataClass(
+      trophies: List.filled(50, 0),
+      mostRecent: 100,
+      initials: List.filled(50, 'AA'));
 
   DataClass getTrophyData() => _trophyData;
 
@@ -14,7 +16,10 @@ class TrophyProgressStore extends ChangeNotifier {
 
   void clearTrophies() {
     //set mostRecent to 100 since no trophies have been found
-    _trophyData = DataClass(trophies: List.filled(50, 0), mostRecent: 100);
+    _trophyData = DataClass(
+        trophies: List.filled(50, 0),
+        mostRecent: 100,
+        initials: List.filled(50, 'AA'));
     log('trophies cleared');
 
     progressStorage.writeTrophies(_trophyData);
@@ -39,6 +44,13 @@ class TrophyProgressStore extends ChangeNotifier {
 
   void changeMostRecent(int index) {
     _trophyData.mostRecent = index;
+    progressStorage.writeTrophies(_trophyData);
+    log(_trophyData.toString());
+    notifyListeners();
+  }
+
+  void changeInitials(int index, String initials) {
+    _trophyData.initials[index] = initials;
     progressStorage.writeTrophies(_trophyData);
     log(_trophyData.toString());
     notifyListeners();

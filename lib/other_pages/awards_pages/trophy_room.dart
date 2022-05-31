@@ -12,8 +12,9 @@ class TrophyRoom extends StatefulWidget {
 }
 
 class TrophyRoomState extends State<TrophyRoom> {
-  late List _trophyList;
+  late List<int> _trophyList;
   late List<Widget> _imagesList;
+  late List<String> _initialsList;
 
   @override
   void didChangeDependencies() {
@@ -21,6 +22,8 @@ class TrophyRoomState extends State<TrophyRoom> {
     setState(() {
       _trophyList =
           Provider.of<TrophyProgressStore>(context).getTrophyData().trophies;
+      _initialsList =
+          Provider.of<TrophyProgressStore>(context).getTrophyData().initials;
     });
 
     log('_trophy list changed to: $_trophyList');
@@ -33,13 +36,17 @@ class TrophyRoomState extends State<TrophyRoom> {
         _trophyList[i] == 1
             ? const Image(
                 image: AssetImage('assets/trophyImages/checkmark.jpg'),
-                height: 30,
-                width: 30)
+                height: 60,
+                width: 60)
             : const Image(
                 image: AssetImage('assets/trophyImages/redx.jpg'),
-                height: 30,
-                width: 30,
+                height: 60,
+                width: 60,
               ),
+        const SizedBox(height: 10),
+        _trophyList[i] == 1
+            ? Text("Discovered by: ${_initialsList[i]}")
+            : const Text("Trophy Locked"),
         //button for testing that trophy saving is working:)
         TextButton(
             onPressed: () {

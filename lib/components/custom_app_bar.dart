@@ -13,7 +13,9 @@ AppBar customAppBar(context, String title) {
             Icon(Icons.water_drop),
             Text('100.3', style: TextStyle(color: Colors.black))
           ]),
-          onPressed: null,
+          onPressed: () {
+            Navigator.of(context).pushNamed('/finishPage');
+          },
           style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(

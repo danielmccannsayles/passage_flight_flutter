@@ -98,7 +98,10 @@ class _MyAppState extends State<MyApp> {
               create: (context) => TrophyProgressStore(),
               child: const TrophyRoom(),
             ),
-        '/finishPage': (context) => const FinishPage(),
+        '/finishPage': (context) => ChangeNotifierProvider(
+              create: (context) => TrophyProgressStore(),
+              child: const FinishPage(),
+            ),
         '/adminPage': (context) => MultiProvider(providers: [
               ChangeNotifierProvider(
                   create: (context) => TrophyProgressStore()),
