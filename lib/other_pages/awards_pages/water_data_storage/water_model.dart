@@ -4,28 +4,26 @@ import 'water_storage.dart';
 import 'dart:developer';
 
 class WaterStore extends ChangeNotifier {
-  int _totalWater = 0;
+  double _totalWater = 0;
 
-  int getWaterData() => _totalWater;
+  double getWaterData() => _totalWater;
 
   final WaterStorage progressStorage = WaterStorage();
 
   void clearWater() {
     _totalWater = 0;
-
     progressStorage.writeWater(_totalWater);
     notifyListeners();
   }
 
-  void addWater(int amount) {
+  void addWater(double amount) {
     _totalWater += amount;
-
     progressStorage.writeWater(_totalWater);
     notifyListeners();
   }
 
   WaterStore() {
-    progressStorage.readWater().then((int value) {
+    progressStorage.readWater().then((double value) {
       _totalWater = value;
       log('Total water initialized as: $_totalWater');
       notifyListeners();

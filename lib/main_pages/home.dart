@@ -165,9 +165,17 @@ class _HomeState extends State<Home> {
                                     ),
                                     const SizedBox(height: 10),
                                     Consumer<TrophyProgressStore>(
+                                      //show no trophies found it no trophies found,
+                                      //otherwise show most recent trophy found
                                       builder: (context, store, child) {
-                                        return Text(
-                                            "ABC found trophy ${store.getTrophyData().mostRecent}");
+                                        int index =
+                                            store.getTrophyData().mostRecent;
+                                        Widget widget = (index == 100)
+                                            ? const Text(
+                                                "No Trophies found yet")
+                                            : Text(
+                                                "${store.getTrophyData().initials[index]} found trophy $index");
+                                        return widget;
                                       },
                                     ),
                                     const SizedBox(height: 20),

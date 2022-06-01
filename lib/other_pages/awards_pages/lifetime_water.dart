@@ -11,7 +11,7 @@ class LifetimeWater extends StatefulWidget {
 }
 
 class LifetimeWaterState extends State<LifetimeWater> {
-  late int _totalWater;
+  late double _totalWater;
 
   @override
   void didChangeDependencies() {
@@ -30,6 +30,10 @@ class LifetimeWaterState extends State<LifetimeWater> {
               padding: const EdgeInsets.all(10),
               child: Column(children: [
                 Text("Total Water: $_totalWater"),
+
+                const SizedBox(height: 20),
+
+                const SizedBox(height: 20),
                 //buttons below used for testing
                 TextButton(
                     onPressed: () {

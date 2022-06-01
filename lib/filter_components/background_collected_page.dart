@@ -105,7 +105,7 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
               arguments: arguments!,
               argumentsLabels: argumentsLabels,
               values: [
-                lastSamples.map((sample) => sample.temperature1),
+                lastSamples.map((sample) => sample.tdsSensor),
               ],
               verticalLinesStyle: const PaintStyle(color: Colors.grey),
               additionalMinimalHorizontalLabelsInterval: 0,
@@ -128,14 +128,14 @@ class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
                 color: const AppColors().buttonBlue,
               ),
               title: const Text('Flowrate Sensor (Measures speed of pump)'),
-              subtitle: const Text("Unit: Meters per second"),
+              subtitle: const Text("Unit: Liters per Minute"),
             ),
             LineChart(
               constraints: const BoxConstraints.expand(height: 350),
               arguments: arguments,
               argumentsLabels: argumentsLabels,
               values: [
-                lastSamples.map((sample) => sample.temperature2),
+                lastSamples.map((sample) => sample.flowRate),
               ],
               verticalLinesStyle: const PaintStyle(color: Colors.grey),
               additionalMinimalHorizontalLabelsInterval: 0,

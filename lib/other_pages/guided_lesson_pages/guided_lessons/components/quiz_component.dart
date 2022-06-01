@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/other_pages/awards_pages/trophy_data_storage/trophy_progress_model.dart';
 import 'package:passage_flutter/theme/app_colors.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../data_storage/learning_progress_model.dart';
 import 'dart:developer';
 import 'dart:math' hide log; //using log for development
@@ -20,6 +23,7 @@ class QuizComponent extends StatefulWidget {
   final bool finalQuiz;
   final Function clearProgress;
   final String quizName;
+  final Function submitQuiz;
 
   //index starts at 0!!!
   final int index;
@@ -35,7 +39,8 @@ class QuizComponent extends StatefulWidget {
       required this.correctAnswers,
       required this.numQuizzes,
       required this.index,
-      required this.lessonName})
+      required this.lessonName,
+      required this.submitQuiz})
       : super(key: key);
 
   @override
@@ -73,17 +78,17 @@ class _QuizComponentState extends State<QuizComponent> {
 
     //check if last quiz
     if (widget.finalQuiz) {
-      //create trophy
+      //trophy generation & saving
       int _trophyIndex = generateTrophy();
-      //add trophy
       Provider.of<TrophyProgressStore>(context, listen: false)
           .addTrophy(_trophyIndex);
-      //set it as most recent
       Provider.of<TrophyProgressStore>(context, listen: false)
           .changeMostRecent(_trophyIndex);
       _quizFinished = false;
-      widget.clearProgress;
+      widget.submitQuiz;
       _selectedAnswers = List.filled(_selectedAnswers.length, 0);
+      //sleep command necessary for clearProgress to run
+      sleep(const Duration(milliseconds: 100));
       Navigator.pushNamed(context, '/finishPage', arguments: _trophyIndex);
     } else {
       Provider.of<LearningProgressStore>(context, listen: false)

@@ -17,26 +17,21 @@ import 'package:passage_flutter/other_pages/resource_pages/check_page.dart';
 import 'package:passage_flutter/other_pages/resource_pages/teacher_resources.dart';
 import 'package:passage_flutter/other_pages/settings_page.dart';
 import 'package:passage_flutter/theme/app_colors.dart';
-
 import 'package:passage_flutter/theme/app_theme.dart';
 import '/components/custom_app_bar.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-//Every time pub get is run, implicilty or explicitly, the IDE thinks this package doesn't exist. Very annoying.
-
+//Every time pub get is run, implicit/ex the IDE (V.S. Code) thinks this^ package doesn't exist. Not an error, just reload.
 import 'package:provider/provider.dart';
-
 import 'package:flutter/services.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-
-//resource pages
 
 void main() {
   // Call this manually before setpreferred orientation
   WidgetsFlutterBinding.ensureInitialized();
 
   //set preferred orientation then run app
+  //set preferred orientation currently used since only one orientation was designed for
   //Documentation: https://greymag.medium.com/flutter-orientation-lock-portrait-only-c98910ebd769
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft])
       .then((value) => runApp(const MyApp()));
@@ -63,65 +58,44 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'LIFE APP',
-      initialRoute: '/',
-      routes: {
-        //TODO: possibly just put all the providers above everything? Idrk but it seems messy rn
-        '/': (context) => MultiProvider(
-              providers: [
-                ChangeNotifierProvider(
-                    create: (context) => TrophyProgressStore()),
-                ChangeNotifierProvider(
-                    create: (context) => LearningProgressStore()),
-              ],
-              child: const MainNavigation(),
-            ),
-        //lessons page has active state which is the progress.
-        '/scienceLessonOne': (context) => MultiProvider(providers: [
-              ChangeNotifierProvider(
-                  create: (context) => TrophyProgressStore()),
-              ChangeNotifierProvider(
-                  create: (context) => LearningProgressStore()),
-            ], child: const ScienceLesson()),
-        //Resource Pages
-        '/teacherResources': (context) => const TeacherResources(),
-        '/checkPage': (context) => const CheckPage(),
-        '/filterResources': (context) => const FilterResources(),
-        '/aboutResources': (context) => const AboutResources(),
-        //Awards Pages
-        '/lifetimeWater': (context) => ChangeNotifierProvider(
-              create: (context) => WaterStore(),
-              child: const LifetimeWater(),
-            ),
-        '/trophyRoom': (context) => ChangeNotifierProvider(
-              create: (context) => TrophyProgressStore(),
-              child: const TrophyRoom(),
-            ),
-        '/finishPage': (context) => ChangeNotifierProvider(
-              create: (context) => TrophyProgressStore(),
-              child: const FinishPage(),
-            ),
-        '/adminPage': (context) => MultiProvider(providers: [
-              ChangeNotifierProvider(
-                  create: (context) => TrophyProgressStore()),
-              ChangeNotifierProvider(create: (context) => WaterStore()),
-            ], child: const AdminPage()),
-        '/settingsPage': (context) => SettingsPage(changeLocale: setLocale),
-      },
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', ''), // English, no country code
-        Locale('es', ''), // Spanish, no country code
-      ],
-      locale: _locale,
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => TrophyProgressStore()),
+          ChangeNotifierProvider(create: (context) => LearningProgressStore()),
+          ChangeNotifierProvider(create: (context) => WaterStore()),
+        ],
+        child: MaterialApp(
+          title: 'LIFE APP',
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const MainNavigation(),
+            //lessons page has active state which is the progress.
+            '/scienceLessonOne': (context) => const ScienceLesson(),
+            //Resource Pages
+            '/teacherResources': (context) => const TeacherResources(),
+            '/checkPage': (context) => const CheckPage(),
+            '/filterResources': (context) => const FilterResources(),
+            '/aboutResources': (context) => const AboutResources(),
+            //Awards Pages
+            '/lifetimeWater': (context) => const LifetimeWater(),
+            '/trophyRoom': (context) => const TrophyRoom(),
+            '/finishPage': (context) => const FinishPage(),
+            '/adminPage': (context) => const AdminPage(),
+            '/settingsPage': (context) => SettingsPage(changeLocale: setLocale),
+          },
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', ''), // English, no country code
+            Locale('es', ''), // Spanish, no country code
+          ],
+          locale: _locale,
+          theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+        ));
   }
 }
 
@@ -135,7 +109,10 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   //initialized at 0 to start on the welcome screen
   int _selectedIndex = 0;
-
+  //specific use case - if main is pushed to stack and you want to choose which
+  //index to start on. Only true on first time main is pushed to stack, so that
+  //if context is popped and we go back to main, it automatically remembers where
+  //we were.
   bool _firstUpdate = true;
 
   void _onItemTapped(int index) {
@@ -145,6 +122,7 @@ class _MainNavigationState extends State<MainNavigation> {
     });
   }
 
+  //4 main pages
   static final List<Widget> _pages = <Widget>[
     const WelcomePage(),
     const Home(),
@@ -156,8 +134,7 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget build(BuildContext context) {
     //only done on first update - used to push argument to named path so that you can
     //navigate to one of the pages
-    //ONLY NEEDED WHEN PUSHING NEW NAMED ROUTE - obsolete now, was used to get around pdf
-    //viewer problem
+    //ONLY NEEDED WHEN PUSHING NEW NAMED ROUTE - used to get around pdfx problem
     if (_firstUpdate) {
       int _startingIndex = ModalRoute.of(context)?.settings.arguments != null
           ? ModalRoute.of(context)?.settings.arguments as int
@@ -211,12 +188,13 @@ class _MainNavigationState extends State<MainNavigation> {
                     activeColor: AppTheme.colors.buttonBlue,
                   ),
                 ],
-                selectedIndex: _selectedIndex, //New
+                selectedIndex: _selectedIndex,
                 onItemSelected: _onItemTapped,
               ),
             ),
           ),
         ),
+        //allows for content to go under the floating nav bar
         extendBody: true,
         body: _pages[_selectedIndex]);
   }

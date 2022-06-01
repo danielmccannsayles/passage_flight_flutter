@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:debounce_throttle/debounce_throttle.dart';
 import 'dart:developer';
 
 import 'components/guided_app_bar.dart';
@@ -32,11 +31,9 @@ final quizTwoJson = QuizJson([
   "6"
 ]);
 
-//define where quiz objects are in the page(their index, starting at 0)
+//define where quiz objects are in the page(their index, starting at 0). Necessary
+//for scrollto
 final List whereAreQuizzes = [10, 13];
-
-//TODO: See if I can remove this somehow
-//used to tell the quiz component how big it can be (necessary bc scroll)
 
 //Begin science lesson widget
 class ScienceLesson extends StatefulWidget {
@@ -49,36 +46,18 @@ class ScienceLesson extends StatefulWidget {
 class ScienceLessonState extends State<ScienceLesson> {
   final ItemScrollController _scrollController = ItemScrollController();
 
-  final throttle =
-      Throttle<double>(const Duration(milliseconds: 500), initialValue: 0);
-
-  //what the current position is
-  double _scrollPosition = 0;
-
   //what the current progress is set to
   double _currentProgress = 0;
 
-  //passed to app bar as a visual indicator of progress
-  /*
-  - = general progress calculated from page height
-  [] = quizzes. 
-  ------[]-----[]-----[]
-
- _progressArray should be calculated like this: 
-  Iterate through the progress data for the lesson, starting at 1. 
-  */
   late List _progressArray;
-
-  //defined in WidgetsBinding so as not to query scrollController before it attaches
-  double _scrollHeight = 0;
 
   int numQuizzes = 2;
 
-  void clearProgress() {
-    _scrollController.scrollTo(
-        index: 0,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.fastOutSlowIn);
+  //used for last quiz
+  void submitQuiz() {
+    _scrollController.jumpTo(
+      index: 0,
+    );
     setState(() {
       _currentProgress = 0;
       _progressArray = List.filled(_progressArray.length, 0);
@@ -87,24 +66,34 @@ class ScienceLessonState extends State<ScienceLesson> {
         .clearProgress('scienceOne');
   }
 
-  //In didChange Dependencies context is bound so we can use Provider.of(context)
+  void clearProgress() {
+    _scrollController.scrollTo(
+      index: 0,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+    setState(() {
+      _currentProgress = 0;
+      _progressArray = List.filled(_progressArray.length, 0);
+    });
+    Provider.of<LearningProgressStore>(context, listen: false)
+        .clearProgress('scienceOne');
+  }
+
+  //In didChangeDependencies context is bound so we can use Provider.of(context)
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     setState(() {
       _progressArray = Provider.of<LearningProgressStore>(context)
           .getProgressData()
           .scienceOne;
 
-      //broke into three lines bc it wasn't working idk why
       _currentProgress = _progressArray.fold(0, (t, c) => t + c);
-      _currentProgress /= _progressArray.length;
-      _currentProgress * 100;
-      _currentProgress.toInt();
+      _currentProgress *= 100 / _progressArray.length;
     });
 
-    log('_progressvisual changed to: $_progressArray');
+    log('_currentProgress changed to: $_progressArray');
   }
 
   Widget _myList(int index) {
@@ -134,6 +123,7 @@ class ScienceLessonState extends State<ScienceLesson> {
         index: 0,
         lessonName: 'scienceOne',
         finalQuiz: false,
+        submitQuiz: submitQuiz,
       ),
       const SizedBox(
         height: 200,
@@ -150,10 +140,11 @@ class ScienceLessonState extends State<ScienceLesson> {
         index: 1,
         lessonName: 'scienceOne',
         finalQuiz: true,
+        submitQuiz: submitQuiz,
       ),
     ];
-    //super jank but idk if theres a better way of dynamically doing this
-    //this is used becausescrollablepositioned list has to use a builder file.
+
+    //this is used because ScrollablePositionedList has to use a builder file.
     return list[index];
   }
 
@@ -164,6 +155,8 @@ class ScienceLessonState extends State<ScienceLesson> {
             index: whereAreQuizzes[i],
             duration: const Duration(milliseconds: 200),
             curve: Curves.fastOutSlowIn);
+        //don't scroll again
+        return;
       }
     }
   }

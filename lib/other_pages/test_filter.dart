@@ -194,7 +194,7 @@ class _FiltersHomeState extends State<FiltersHome> {
       _connecting = true;
     });
     try {
-      _collectingTask = await BackgroundCollectingTask.connect(server);
+      _collectingTask = await BackgroundCollectingTask.connect(server, context);
       await _collectingTask!.start();
     } catch (ex) {
       _collectingTask?.cancel();

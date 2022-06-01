@@ -2,19 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:passage_flutter/other_pages/awards_pages/water_data_storage/water_model.dart';
+import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'dart:developer';
 
 class DataSample {
-  double temperature1;
-  double temperature2;
+  double tdsSensor;
+  double flowRate;
   int waterHeight1;
   int waterHeight2;
   DateTime timestamp;
 
   DataSample({
-    required this.temperature1,
-    required this.temperature2,
+    required this.tdsSensor,
+    required this.flowRate,
     required this.waterHeight1,
     required this.waterHeight2,
     required this.timestamp,
@@ -42,7 +44,7 @@ class BackgroundCollectingTask extends Model {
 
   bool inProgress = false;
 
-  BackgroundCollectingTask._fromConnection(this._connection) {
+  BackgroundCollectingTask._fromConnection(this._connection, context) {
     log('starting');
     _connection?.input!.listen((data) {
       _buffer += data;
@@ -55,8 +57,8 @@ class BackgroundCollectingTask extends Model {
         int index = _buffer.indexOf('t'.codeUnitAt(0));
         if (index >= 0 && _buffer.length - index >= 7) {
           final DataSample sample = DataSample(
-              temperature1: (_buffer[index + 1]).toDouble(),
-              temperature2: (_buffer[index + 3] + _buffer[index + 4] / 100),
+              tdsSensor: (_buffer[index + 1]).toDouble(),
+              flowRate: (_buffer[index + 3] + _buffer[index + 4] / 100),
               waterHeight2: (_buffer[index + 5]),
               waterHeight1: (_buffer[index + 6]),
               timestamp: DateTime.now());
@@ -64,7 +66,8 @@ class BackgroundCollectingTask extends Model {
 
           samples.add(sample);
           notifyListeners(); // Note: It shouldn't be invoked very often - in this example data comes at every second, but if there would be more data, it should update (including repaint of graphs) in some fixed interval instead of after every sample.
-          //print("${sample.timestamp.toString()} -> ${sample.temperature1} / ${sample.temperature2}");
+          Provider.of<WaterStore>(context, listen: false)
+              .addWater(sample.flowRate * 1000);
         }
         // Otherwise break
         else {
@@ -80,10 +83,10 @@ class BackgroundCollectingTask extends Model {
   }
 
   static Future<BackgroundCollectingTask> connect(
-      BluetoothDevice server) async {
+      BluetoothDevice server, BuildContext context) async {
     final BluetoothConnection connection =
         await BluetoothConnection.toAddress(server.address);
-    return BackgroundCollectingTask._fromConnection(connection);
+    return BackgroundCollectingTask._fromConnection(connection, context);
   }
 
   void dispose() {

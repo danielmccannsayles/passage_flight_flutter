@@ -6,6 +6,10 @@ part 'easy_data.g.dart';
 
 @JsonSerializable()
 class EasyData {
+  /*
+  int current: set to current progress
+  int progress: number of quizzes completed.
+  */
   List<int> mathOne;
   List<int> scienceOne;
 

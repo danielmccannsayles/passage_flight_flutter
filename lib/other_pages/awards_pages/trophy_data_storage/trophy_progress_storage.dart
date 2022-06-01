@@ -28,16 +28,15 @@ class TrophyProgressStorage {
     try {
       final file = await _localFile;
 
-      // Read the file
       final contents = await file.readAsString();
-      log('Trophy contents: $contents');
+      log('Trophy read from file: ${json.decode(contents).toString()}');
 
       return DataClass.fromJson(json.decode(contents));
     } catch (e) {
       log(e.toString());
+
       // Most likely error is that this is being run for the first time.
       //return the default value in this case
-
       return DataClass(
           trophies: List.filled(50, 0),
           mostRecent: 100,
@@ -49,7 +48,7 @@ class TrophyProgressStorage {
     final file = await _localFile;
 
     // Write the file
-    log('Trophies written : $testData');
+    log('Trophies written : ${testData.toString()}');
     return file.writeAsString(jsonEncode(testData.toJson()));
   }
 }

@@ -4,6 +4,7 @@ import 'package:passage_flutter/other_pages/awards_pages/trophy_data_storage/tro
 import 'package:passage_flutter/theme/app_theme.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
+import 'dart:developer';
 
 class FinishPage extends StatefulWidget {
   const FinishPage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class FinishPageState extends State<FinishPage> {
     //TODO: default currently set to 2 for testing purposes .. change this in production to 100
     _trophyIndex = ModalRoute.of(context)?.settings.arguments != null
         ? ModalRoute.of(context)?.settings.arguments as int
-        : 2;
+        : 29;
 
     //if valid then they just completed a lesson. If not valid, remove the ability to add initials
 
@@ -60,7 +61,7 @@ class FinishPageState extends State<FinishPage> {
                   _valid
                       ? Row(children: [
                           PinCodeTextField(
-                            autofocus: true,
+                            autofocus: false,
                             controller: _controller,
                             hideCharacter: false,
                             highlight: true,
@@ -72,6 +73,7 @@ class FinishPageState extends State<FinishPage> {
                             },
                             onDone: (text) {
                               _initials = text;
+                              log('done, text: $text');
                             },
                             pinBoxWidth: 50,
                             pinBoxHeight: 64,
@@ -113,13 +115,12 @@ class FinishPageState extends State<FinishPage> {
                                       });
                                       if (nameReg.hasMatch(_initials) &&
                                           _initials.length == 2) {
-                                        _controller.clear();
-
                                         Provider.of<TrophyProgressStore>(
                                                 context,
                                                 listen: false)
                                             .changeInitials(
                                                 _trophyIndex, _initials);
+                                        _controller.clear();
                                       } else {
                                         _controller.clear();
                                         _showError = true;

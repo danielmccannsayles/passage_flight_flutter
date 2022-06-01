@@ -22,7 +22,7 @@ class WaterStorage {
     return File('$path/water.txt');
   }
 
-  Future<int> readWater() async {
+  Future<double> readWater() async {
     try {
       final file = await _localFile;
 
@@ -30,7 +30,7 @@ class WaterStorage {
       final contents = await file.readAsString();
       log('Water file contents: $contents');
 
-      return int.parse(contents);
+      return double.parse(contents);
     } catch (e) {
       log(e.toString());
       // Most likely error is that this is being run for the first time.
@@ -40,7 +40,7 @@ class WaterStorage {
     }
   }
 
-  Future<File> writeWater(int data) async {
+  Future<File> writeWater(double data) async {
     final file = await _localFile;
 
     log('Water: $data');

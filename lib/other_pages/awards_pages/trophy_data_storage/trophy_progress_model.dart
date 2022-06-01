@@ -5,6 +5,7 @@ import 'trophy_progress_storage.dart';
 import 'dart:developer';
 
 class TrophyProgressStore extends ChangeNotifier {
+  //set it to default - will be filled in as soon as its created
   DataClass _trophyData = DataClass(
       trophies: List.filled(50, 0),
       mostRecent: 100,
@@ -21,41 +22,36 @@ class TrophyProgressStore extends ChangeNotifier {
         mostRecent: 100,
         initials: List.filled(50, 'AA'));
     log('trophies cleared');
-
     progressStorage.writeTrophies(_trophyData);
     notifyListeners();
   }
 
   void addTrophy(int index) {
     _trophyData.trophies[index] = 1;
-    //store it in file
     progressStorage.writeTrophies(_trophyData);
-    log(_trophyData.toString());
     notifyListeners();
   }
 
   void subtractTrophy(int index) {
     _trophyData.trophies[index] = 0;
-    //store it in file
     progressStorage.writeTrophies(_trophyData);
-    log(_trophyData.toString());
     notifyListeners();
   }
 
   void changeMostRecent(int index) {
     _trophyData.mostRecent = index;
     progressStorage.writeTrophies(_trophyData);
-    log(_trophyData.toString());
     notifyListeners();
   }
 
   void changeInitials(int index, String initials) {
-    _trophyData.initials[index] = initials;
+    log('initials changed to: $initials');
+    _trophyData.initials[index] = initials.toUpperCase();
     progressStorage.writeTrophies(_trophyData);
-    log(_trophyData.toString());
     notifyListeners();
   }
 
+  //when the store is created, initialize it to whatever data is in storage.
   TrophyProgressStore() {
     progressStorage.readTrophies().then((DataClass value) {
       _trophyData = value;

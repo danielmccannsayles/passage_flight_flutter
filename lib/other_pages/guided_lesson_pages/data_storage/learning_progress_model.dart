@@ -30,6 +30,7 @@ class LearningProgressStore extends ChangeNotifier {
         mathOne: temp[keysList.elementAt(0)],
         scienceOne: temp[keysList.elementAt(1)]);
 
+    log('Progress Cleared');
     progressStorage.writeProgress(_progressData);
     notifyListeners();
   }
