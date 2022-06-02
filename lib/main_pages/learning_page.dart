@@ -15,7 +15,7 @@ class LearningPage extends StatefulWidget {
 
 //global controller. Reassign controller when things change.
 PdfController pdfController = PdfController(
-    document: PdfDocument.openAsset('assets/lessonPdfs/lesson2.pdf'));
+    document: PdfDocument.openAsset('assets/module1/module1.1.pdf'));
 
 createController(document) {
   pdfController.loadDocument(document);
@@ -25,17 +25,43 @@ createController(document) {
 class LearningPageState extends State<LearningPage> {
   //complete list - change order manually. Filtered automatically.
   final _completeList = [
-    PdfFile('assets/lessonPdfs/learning1.pdf', 'Lesson 1 (S)',
+    PdfFile('assets/lessonPdfs/module1/module1.1.pdf', 'Lesson 1.1',
         'This lesson covers the filter', const AppColors().buttonBlue),
-    PdfFile('assets/lessonPdfs/lesson2.pdf', 'Lesson 2 (L)',
-        'This lesson covers water', const AppColors().buttonBlue),
-    PdfFile('assets/lessonPdfs/lesson3.pdf', 'Lesson 3 (L)',
-        'This lesson covers gravity and physics', const AppColors().buttonBlue),
+    PdfFile('assets/lessonPdfs/module1/module1.2.pdf', 'Lesson 1.2',
+        'This lesson covers the filter', const AppColors().buttonBlue),
+    PdfFile('assets/lessonPdfs/module1/module1.3.pdf', 'Lesson 1.3',
+        'This lesson covers the filter', const AppColors().buttonBlue),
+    PdfFile(
+        'assets/lessonPdfs/module1/module1.4.pdf',
+        'Lesson 1.4 (Bonus Activities)',
+        'This lesson covers the filter',
+        const AppColors().buttonBlue),
     AdventureObject(
         'Filter Learning Adventure 1',
         'Self-guided lesson, learn about the filter',
         '/scienceLessonOne',
-        Colors.green)
+        Colors.green),
+    //module 2
+    PdfFile('assets/module2/module2.1.pdf', 'Lesson 2.1',
+        'This lesson covers the filter', const AppColors().orange),
+    PdfFile('assets/lessonPdfs/module2/module2.2.pdf', 'Lesson 2.2',
+        'This lesson covers the filter', const AppColors().orange),
+    PdfFile('assets/lessonPdfs/module2/module2.3.pdf', 'Lesson 2.3',
+        'This lesson covers the filter', const AppColors().orange),
+    PdfFile('assets/lessonPdfs/module2/module2.4.pdf', 'Lesson 2.4',
+        'This lesson covers the filter', const AppColors().orange),
+    PdfFile('assets/lessonPdfs/module2/module2.5.pdf', 'Lesson 2.5 (Bonus)',
+        'This lesson covers the filter', const AppColors().orange),
+    //module 3
+    PdfFile('assets/lessonPdfs/module3/module3.1.pdf', 'Lesson 3.1',
+        'This lesson covers the filter', Colors.purple),
+    PdfFile('assets/lessonPdfs/module3/module3.2.pdf', 'Lesson 3.2',
+        'This lesson covers the filter', Colors.purple),
+    PdfFile(
+        'assets/lessonPdfs/module3/module3.3.pdf',
+        'Lesson 3.3 (Bonus Activities)',
+        'This lesson covers the filter',
+        Colors.purple),
   ];
 
   String _dropDownValue = 'All';

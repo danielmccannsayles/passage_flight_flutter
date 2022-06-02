@@ -13,46 +13,60 @@ class ImageInfo {
   String title;
   String type;
   String description;
-  String path;
+  Image image;
 
-  ImageInfo(this.title, this.type, this.description, this.path);
+  ImageInfo(this.title, this.type, this.description, this.image);
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  List<ImageInfo> imagesList = [
+  final List<ImageInfo> _imagesList = [
     ImageInfo(
         'Intelligent Filter',
         'Intelligent Filter',
         'Click through to see the different components of the filter!',
-        'assets/welcomePictures/fullview.jpg'),
+        Image.asset('assets/welcomePictures/fullview.jpg',
+            width: 290, height: 240)),
     ImageInfo(
         'Gravel',
         'Filter Section',
         'The gravel is used to filter out large particles such as twigs, rocks, or leaves',
-        'assets/welcomePictures/gravel.jpg'),
+        Image.asset('assets/welcomePictures/gravel.jpg',
+            width: 290, height: 240)),
     ImageInfo(
         'Sand',
         'Filter Section',
         'The sand is used to filter out small particles such as dirt, algae, or other organic matter',
-        'assets/welcomePictures/sand.jpg'),
+        Image.asset('assets/welcomePictures/sand.jpg',
+            width: 290, height: 240)),
     ImageInfo(
         'Activated Charcoal',
         'Filter Section',
         'The activated charcoal is used to filter out harmful chemicals. It latches onto them and doesn\'t let go!',
-        'assets/welcomePictures/charcoal.jpg'),
+        Image.asset('assets/welcomePictures/charcoal.jpg',
+            width: 290, height: 240)),
     ImageInfo(
         'Reservoirs',
         'Container',
         'The reservoirs hold excess water since the pump can only pump so much at a time! The right one holds filtered water, while the left one holds unfiltered water',
-        'assets/welcomePictures/reservoirs.jpg'),
+        Image.asset('assets/welcomePictures/reservoirs.jpg',
+            width: 290, height: 240)),
   ];
   int currentImage = 0;
-  late String currentImageUrl;
 
   @override
   void initState() {
     super.initState();
-    currentImageUrl = imagesList[0].path;
+  }
+
+  @override
+  void didChangeDependencies() {
+    //first .image is to select the Image asset. second .image is used to refer to the
+    //image from the image asset. Weird.
+    for (int i = 0; i < _imagesList.length; i++) {
+      precacheImage(_imagesList[i].image.image, context);
+    }
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -85,7 +99,7 @@ class _WelcomePageState extends State<WelcomePage> {
             const SizedBox(
               width: 20,
             ),
-            Image.asset(imagesList[currentImage].path, width: 290, height: 240),
+            _imagesList[currentImage].image,
             const SizedBox(
               width: 20,
             ),
@@ -106,14 +120,14 @@ class _WelcomePageState extends State<WelcomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            imagesList[currentImage].title,
+                            _imagesList[currentImage].title,
                             style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                           const SizedBox(height: 20),
-                          Text('Type: ' + imagesList[currentImage].type),
+                          Text('Type: ' + _imagesList[currentImage].type),
                           const SizedBox(height: 20),
                           Text('What it does: ' +
-                              imagesList[currentImage].description)
+                              _imagesList[currentImage].description)
                         ]),
                   )),
               Row(
@@ -148,7 +162,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                   IconButton(
                     onPressed: () {
-                      if (currentImage < imagesList.length - 1) {
+                      if (currentImage < _imagesList.length - 1) {
                         setState(() {
                           currentImage++;
                         });
@@ -162,13 +176,13 @@ class _WelcomePageState extends State<WelcomePage> {
                     icon: Stack(children: [
                       Icon(
                         Icons.circle_outlined,
-                        color: (currentImage == imagesList.length - 1)
+                        color: (currentImage == _imagesList.length - 1)
                             ? const AppColors().lightBlue
                             : const AppColors().buttonBlue,
                       ),
                       Icon(
                         Icons.chevron_right,
-                        color: (currentImage == imagesList.length - 1)
+                        color: (currentImage == _imagesList.length - 1)
                             ? const AppColors().lightBlue
                             : const AppColors().buttonBlue,
                       )
