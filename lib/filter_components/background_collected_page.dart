@@ -15,7 +15,6 @@ class BackgroundCollectedPage extends StatefulWidget {
 
 class _BackgroundCollectedPageState extends State<BackgroundCollectedPage> {
   //how much of the data is shown
-  Duration _duration1 = const Duration(hours: 1);
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/components/secondary_app_bar.dart';
-import 'package:passage_flutter/components/tita_text_bar.dart';
 import 'package:passage_flutter/theme/app_colors.dart';
 import 'package:passage_flutter/theme/components/outlined_button.dart';
 
@@ -12,10 +11,6 @@ class TeacherResources extends StatefulWidget {
 }
 
 class TeacherState extends State<TeacherResources> {
-  final double _height = 150;
-
-  final double _width = 200;
-
   @override
   void initState() {
     super.initState();

@@ -8,6 +8,7 @@
 
 import 'package:device_info_plus_web/device_info_plus_web.dart';
 import 'package:flutter_native_splash/flutter_native_splash_web.dart';
+// ignore: implementation_imports
 import 'package:pdfx/src/renderer/web/pdfx_plugin.dart';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';

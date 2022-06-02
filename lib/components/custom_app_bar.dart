@@ -29,7 +29,6 @@ AppBar customAppBar(context, String title) {
                       side: BorderSide(
                           color: AppTheme.colors.darkBlue, width: 4))))),
     ),
-    // TODO(daniel): https://stackoverflow.com/questions/62717682/stack-multiple-icons-to-flutter-iconbutton
 
     actions: <Widget>[
       IconButton(

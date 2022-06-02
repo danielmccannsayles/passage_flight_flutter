@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:passage_flutter/other_pages/awards_pages/trophy_data_storage/trophy_progress_model.dart';
 import 'package:passage_flutter/theme/app_colors.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../data_storage/learning_progress_model.dart';
 import 'dart:developer';
 import 'dart:math' hide log; //using log for development
@@ -51,7 +50,7 @@ class _QuizComponentState extends State<QuizComponent> {
   //internal state - initialized as a list of 'numQuizzes'  entries.
   late List<int> _progressData;
   //
-  late final numQuestions;
+  late final int numQuestions;
 
   //Add the index of the answer they choose to this
   //Selected answers is initialized to all have a value of 100: [100, 100];

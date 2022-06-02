@@ -25,9 +25,9 @@ class LearningProgressStorage {
   }
 
   Future<EasyData> readProgress() async {
-    //TODO: If getting an error after adding 0's to the list then comment out
-    //some of this - it's probably looking at old data that was saved.
-    //run this when needed to reset
+    /* If getting an error after adding 0's to the list then comment out
+    the body of this function - it's probably looking at old data that was saved.
+    run this when needed to reset: */
     // return EasyData(mathOne: [0, 0], scienceOne: [0, 0]);
     try {
       final file = await _localFile;
@@ -42,11 +42,6 @@ class LearningProgressStorage {
       // Most likely error is that this is being run for the first time.
       //return the default value in this case
 
-      //hardcoded data here - ideally should be dynamic but too much work
-      //TODO: make this dynamic somehow
-      //TODO: Possibly create another permanent data storage that stores global variables such as..
-      //TODO: Amount of quizzes - or just make a new file that defines it and import
-      //that file lol
       return EasyData(mathOne: [0, 0], scienceOne: [0, 0]);
     }
   }

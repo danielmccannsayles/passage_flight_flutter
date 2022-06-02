@@ -142,7 +142,6 @@ class _WelcomePageState extends State<WelcomePage> {
                         null;
                       }
                     },
-                    //TODO: fix this - remove splash since it doesnt clip
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     icon: Stack(children: [
@@ -151,12 +150,14 @@ class _WelcomePageState extends State<WelcomePage> {
                         color: (currentImage == 0)
                             ? const AppColors().lightBlue
                             : const AppColors().buttonBlue,
+                        size: 30,
                       ),
                       Icon(
                         Icons.chevron_left,
                         color: (currentImage == 0)
                             ? const AppColors().lightBlue
                             : const AppColors().buttonBlue,
+                        size: 30,
                       )
                     ]),
                   ),
@@ -170,7 +171,6 @@ class _WelcomePageState extends State<WelcomePage> {
                         null;
                       }
                     },
-                    //TODO: fix this - remove splash since it doesnt clip
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     icon: Stack(children: [
@@ -179,12 +179,14 @@ class _WelcomePageState extends State<WelcomePage> {
                         color: (currentImage == _imagesList.length - 1)
                             ? const AppColors().lightBlue
                             : const AppColors().buttonBlue,
+                        size: 30,
                       ),
                       Icon(
                         Icons.chevron_right,
                         color: (currentImage == _imagesList.length - 1)
                             ? const AppColors().lightBlue
                             : const AppColors().buttonBlue,
+                        size: 30,
                       )
                     ]),
                   ),

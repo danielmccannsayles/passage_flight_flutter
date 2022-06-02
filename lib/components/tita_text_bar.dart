@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:passage_flutter/theme/app_colors.dart';
-import 'package:passage_flutter/theme/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-//TODO: If the svg isn't working follow this:
+//If the svg isn't working follow this:
 //https://stackoverflow.com/questions/61202925/svgpicture-image-rendering-error-in-flutter
 
 class TitaTextBar extends StatelessWidget {

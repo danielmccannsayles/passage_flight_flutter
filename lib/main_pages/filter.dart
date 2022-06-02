@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/theme/app_colors.dart';
 import 'package:passage_flutter/theme/components/outlined_button.dart';
-import '../components/custom_app_bar.dart';
 import '../filter_components/background_collecting_task.dart';
 
 //for bluetooth connection

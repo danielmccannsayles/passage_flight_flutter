@@ -52,8 +52,8 @@ class CheckPageState extends State<CheckPage> {
                           setState(() {
                             _submitting = true;
                           });
-                          //TODO uncomment sleep in production .. currently commented since sleep command not available when testing on web-javascript
-                          // sleep(const Duration(milliseconds: 700));
+                          //sleep call to simulate backend stuff happening
+                          sleep(const Duration(milliseconds: 700));
                           setState(() {
                             _submitting = false;
                           });

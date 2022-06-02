@@ -195,57 +195,63 @@ class LearningPageState extends State<LearningPage> {
   Widget build(BuildContext context) {
     return Center(
         child: Padding(
-            padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('Learning',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20)),
-              const SizedBox(height: 4),
-              const Text('Choose a topic to learn'),
-              const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const AppColors().lightBlue,
-                    width: 3,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: SingleChildScrollView(
+                child: Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: DropdownButton<String>(
-                  value: _dropDownValue,
-                  icon: Icon(
-                    Icons.expand_more,
-                    color: const AppColors().buttonBlue,
+                  const Text('Learning',
+                      textAlign: TextAlign.left,
+                      style:
+                          TextStyle(fontWeight: FontWeight.w900, fontSize: 20)),
+                  const SizedBox(height: 4),
+                  const Text('Choose a topic to learn'),
+                  const SizedBox(height: 20),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: const AppColors().lightBlue,
+                        width: 3,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: DropdownButton<String>(
+                      value: _dropDownValue,
+                      icon: Icon(
+                        Icons.expand_more,
+                        color: const AppColors().buttonBlue,
+                      ),
+                      underline: const SizedBox(),
+                      elevation: 0,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w900, color: Colors.black),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _dropDownValue = newValue!;
+                        });
+                      },
+                      items: <String>[
+                        'All',
+                        'Learning Adventures',
+                        'Lesson Modules'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
                   ),
-                  underline: const SizedBox(),
-                  elevation: 0,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w900, color: Colors.black),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _dropDownValue = newValue!;
-                    });
-                  },
-                  items: <String>[
-                    'All',
-                    'Learning Adventures',
-                    'Lesson Modules'
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                  child: SizedBox(
+                  const SizedBox(height: 20),
+                  // move single child scroll view here if you want just the lessons to scroll
+                  SizedBox(
                       width: 910,
-                      child: SingleChildScrollView(
-                          child: Wrap(
+                      child: Wrap(
                         spacing: 20,
                         runSpacing: 20,
                         children: _filterList()
@@ -255,8 +261,8 @@ class LearningPageState extends State<LearningPage> {
                                     ? _buildLesson(object)
                                     : const SizedBox())
                             .toList(),
-                      ))))
-            ])));
+                      ))
+                ])))));
   }
 }
 

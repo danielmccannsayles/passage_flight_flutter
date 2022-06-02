@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/components/secondary_app_bar.dart';
 import 'package:passage_flutter/other_pages/awards_pages/trophy_data_storage/trophy_progress_model.dart';
@@ -27,10 +29,9 @@ class FinishPageState extends State<FinishPage> {
   @override
   Widget build(BuildContext context) {
     //argument passed is index of trophy got by user. 100 is default.
-    //TODO: default currently set to 2 for testing purposes .. change this in production to 100
     _trophyIndex = ModalRoute.of(context)?.settings.arguments != null
         ? ModalRoute.of(context)?.settings.arguments as int
-        : 29;
+        : 100;
 
     //if valid then they just completed a lesson. If not valid, remove the ability to add initials
 
@@ -108,8 +109,7 @@ class FinishPageState extends State<FinishPage> {
                                       setState(() {
                                         _submitting = true;
                                       });
-                                      //TODO uncomment sleep in production .. currently commented since sleep command not available when testing on web-javascript
-                                      // sleep(const Duration(milliseconds: 700));
+                                      sleep(const Duration(milliseconds: 700));
                                       setState(() {
                                         _submitting = false;
                                       });

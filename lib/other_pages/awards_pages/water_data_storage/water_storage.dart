@@ -3,7 +3,6 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:developer';
-import 'dart:convert';
 
 //This class reads and writes from memory.
 //https://docs.flutter.dev/cookbook/persistence/reading-writing-files

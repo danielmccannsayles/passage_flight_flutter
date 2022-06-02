@@ -60,6 +60,7 @@ class LifetimeWaterState extends State<LifetimeWater> {
       ),
     ));
 
+    //TODO: make it split into water and not water
     int runningSum = achievementWidths[0];
 
     //middle tiles

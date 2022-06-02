@@ -13,10 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final double _height = 150;
-
-  final double _width = 200;
-
   @override
   void initState() {
     super.initState();

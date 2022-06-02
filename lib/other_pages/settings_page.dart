@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:passage_flutter/components/secondary_app_bar.dart';
-import 'package:passage_flutter/components/tita_text_bar.dart';
 
 class SettingsPage extends StatefulWidget {
   final Function changeLocale;

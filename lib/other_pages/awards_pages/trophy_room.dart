@@ -13,7 +13,6 @@ class TrophyRoom extends StatefulWidget {
 
 class TrophyRoomState extends State<TrophyRoom> {
   late List<int> _trophyList;
-  late List<Widget> _imagesList;
   late List<String> _initialsList;
 
   @override

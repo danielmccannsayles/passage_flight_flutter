@@ -10,7 +10,6 @@ class LearningProgressStore extends ChangeNotifier {
   //the integers are quiz values - 0 for not complete, 1 for complete
   // The array should be (number of quizzes) in length
 
-  //TODO: change this to be dynamic somehow
   EasyData _progressData = EasyData(mathOne: [0, 0], scienceOne: [0, 0]);
 
   EasyData getProgressData() => _progressData;
@@ -59,7 +58,7 @@ class LearningProgressStore extends ChangeNotifier {
       Map temp = value.toMap();
       Iterable keysList = temp.keys;
       //TODO: finish this - should check if the data that is saved is the right length.
-      //TODO: If not it should add as many 0's as necessary, or subtract as many digits from the back.
+      // If not it should add as many 0's as necessary, or subtract as many digits from the back.
 
       // for (var key in keysList){
       //   if (temp[key])
